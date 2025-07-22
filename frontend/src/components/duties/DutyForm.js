@@ -6,7 +6,8 @@ const DutyForm = ({ duty, onSubmit, onCancel }) => {
     name: '',
     description: '',
     frequency: 'daily',
-    days_of_week: []
+    days_of_week: [],
+    is_group_duty: false
   });
   
   useEffect(() => {
@@ -29,15 +30,17 @@ const DutyForm = ({ duty, onSubmit, onCancel }) => {
         name: duty.name || '',
         description: duty.description || '',
         frequency: duty.frequency || 'daily',
-        days_of_week: days_of_week
+        days_of_week: days_of_week,
+        is_group_duty: duty.is_group_duty === 1
       });
     }
   }, [duty]);
   
   const handleChange = (e) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: value
     });
   };
   
@@ -105,6 +108,23 @@ const DutyForm = ({ duty, onSubmit, onCancel }) => {
         days={formData.days_of_week}
         onChange={handleFrequencyChange}
       />
+      
+      <div className="form-group">
+        <label>
+          <input
+            type="checkbox"
+            name="is_group_duty"
+            checked={formData.is_group_duty}
+            onChange={handleChange}
+          />
+          {' '}This is a group duty (can be assigned to multiple people)
+        </label>
+        {formData.is_group_duty && (
+          <div className="form-note">
+            <p>Group duties will be assigned to all active people when using the automatic assignment generator.</p>
+          </div>
+        )}
+      </div>
       
       <div className="modal-footer">
         <button type="button" className="btn" onClick={onCancel}>

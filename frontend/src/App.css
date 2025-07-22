@@ -99,6 +99,16 @@ ul {
   color: #888;
 }
 
+/* Multi-select */
+.multi-select {
+  height: auto;
+  min-height: 100px;
+}
+
+.multi-select option {
+  padding: 8px;
+}
+
 /* Frequency Selector */
 .frequency-selector {
   margin-bottom: 1rem;

@@ -188,6 +188,7 @@ const DutyList = () => {
                 <th>Name</th>
                 <th>Description</th>
                 <th>Frequency</th>
+                <th>Type</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -197,6 +198,7 @@ const DutyList = () => {
                   <td>{duty.name}</td>
                   <td>{duty.description || '-'}</td>
                   <td>{formatFrequency(duty)}</td>
+                  <td>{duty.is_group_duty === 1 ? 'Group' : 'Individual'}</td>
                   <td>
                     <button
                       className="btn btn-primary btn-sm"

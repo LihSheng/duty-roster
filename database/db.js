@@ -23,6 +23,7 @@ db.serialize(() => {
     description TEXT,
     frequency TEXT NOT NULL, -- 'daily', 'weekly', 'custom'
     days_of_week TEXT, -- JSON array for weekly duties
+    is_group_duty BOOLEAN DEFAULT 0, -- Indicates if this duty can be assigned to multiple people
     is_active BOOLEAN DEFAULT 1,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);

@@ -140,13 +140,26 @@ router.post('/generate-assignments', (req, res) => {
                   continue; // Skip if already exists
                 }
                 
-                const personIndex = i % people.length;
-                assignments.push({
-                  duty_id: duty.id,
-                  person_id: people[personIndex].id,
-                  assigned_date: dateStr,
-                  due_date: dateStr
-                });
+                // For group duties, assign to all people
+                if (duty.is_group_duty === 1) {
+                  people.forEach(person => {
+                    assignments.push({
+                      duty_id: duty.id,
+                      person_id: person.id,
+                      assigned_date: dateStr,
+                      due_date: dateStr
+                    });
+                  });
+                } else {
+                  // For individual duties, rotate among people
+                  const personIndex = i % people.length;
+                  assignments.push({
+                    duty_id: duty.id,
+                    person_id: people[personIndex].id,
+                    assigned_date: dateStr,
+                    due_date: dateStr
+                  });
+                }
               }
             } else if (duty.frequency === 'working_days') {
               // Assign duties only on working days
@@ -165,13 +178,26 @@ router.post('/generate-assignments', (req, res) => {
                     continue; // Skip if already exists
                   }
                   
-                  const personIndex = i % people.length;
-                  assignments.push({
-                    duty_id: duty.id,
-                    person_id: people[personIndex].id,
-                    assigned_date: dateStr,
-                    due_date: dateStr
-                  });
+                  // For group duties, assign to all people
+                  if (duty.is_group_duty === 1) {
+                    people.forEach(person => {
+                      assignments.push({
+                        duty_id: duty.id,
+                        person_id: person.id,
+                        assigned_date: dateStr,
+                        due_date: dateStr
+                      });
+                    });
+                  } else {
+                    // For individual duties, rotate among people
+                    const personIndex = i % people.length;
+                    assignments.push({
+                      duty_id: duty.id,
+                      person_id: people[personIndex].id,
+                      assigned_date: dateStr,
+                      due_date: dateStr
+                    });
+                  }
                 }
               }
             } else if (duty.frequency === 'weekly' && daysOfWeek.length > 0) {
@@ -190,13 +216,26 @@ router.post('/generate-assignments', (req, res) => {
                     continue; // Skip if already exists
                   }
                   
-                  assignments.push({
-                    duty_id: duty.id,
-                    person_id: people[personIndex % people.length].id,
-                    assigned_date: dateStr,
-                    due_date: dateStr
-                  });
-                  personIndex++;
+                  // For group duties, assign to all people
+                  if (duty.is_group_duty === 1) {
+                    people.forEach(person => {
+                      assignments.push({
+                        duty_id: duty.id,
+                        person_id: person.id,
+                        assigned_date: dateStr,
+                        due_date: dateStr
+                      });
+                    });
+                  } else {
+                    // For individual duties, rotate among people
+                    assignments.push({
+                      duty_id: duty.id,
+                      person_id: people[personIndex % people.length].id,
+                      assigned_date: dateStr,
+                      due_date: dateStr
+                    });
+                    personIndex++;
+                  }
                 }
               }
             } else if (duty.frequency === 'monthly') {
@@ -241,8 +280,8 @@ router.post('/generate-assignments', (req, res) => {
                     continue; // Skip if already exists
                   }
                   
-                  // For House keeping, assign to all people
-                  if (duty.name === 'House keeping') {
+                  // For group duties or House keeping, assign to all people
+                  if (duty.is_group_duty === 1 || duty.name === 'House keeping') {
                     people.forEach(person => {
                       assignments.push({
                         duty_id: duty.id,

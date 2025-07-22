@@ -15,11 +15,11 @@ router.get('/', (req, res) => {
 
 // Create new duty
 router.post('/', (req, res) => {
-  const { name, description, frequency, days_of_week } = req.body;
+  const { name, description, frequency, days_of_week, is_group_duty } = req.body;
   
   db.run(
-    'INSERT INTO duties (name, description, frequency, days_of_week) VALUES (?, ?, ?, ?)',
-    [name, description, frequency, JSON.stringify(days_of_week || [])],
+    'INSERT INTO duties (name, description, frequency, days_of_week, is_group_duty) VALUES (?, ?, ?, ?, ?)',
+    [name, description, frequency, JSON.stringify(days_of_week || []), is_group_duty ? 1 : 0],
     function(err) {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -32,11 +32,11 @@ router.post('/', (req, res) => {
 
 // Update duty
 router.put('/:id', (req, res) => {
-  const { name, description, frequency, days_of_week } = req.body;
+  const { name, description, frequency, days_of_week, is_group_duty } = req.body;
   
   db.run(
-    'UPDATE duties SET name = ?, description = ?, frequency = ?, days_of_week = ? WHERE id = ?',
-    [name, description, frequency, JSON.stringify(days_of_week || []), req.params.id],
+    'UPDATE duties SET name = ?, description = ?, frequency = ?, days_of_week = ?, is_group_duty = ? WHERE id = ?',
+    [name, description, frequency, JSON.stringify(days_of_week || []), is_group_duty ? 1 : 0, req.params.id],
     function(err) {
       if (err) {
         res.status(500).json({ error: err.message });
