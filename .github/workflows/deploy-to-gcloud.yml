@@ -1,0 +1,55 @@
+name: Deploy to Google Cloud
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy to Google Cloud
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+
+      - name: Build frontend
+        run: cd frontend && npm run build
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Deploy to App Engine
+        run: |
+          # Create app.yaml if it doesn't exist
+          if [ ! -f app.yaml ]; then
+            cat > app.yaml << EOF
+            runtime: nodejs18
+            env: standard
+            instance_class: F1
+            automatic_scaling:
+              min_instances: 0
+              max_instances: 1
+            env_variables:
+              NODE_ENV: "production"
+            EOF
+          fi
+          
+          # Deploy to App Engine
+          gcloud app deploy --quiet
