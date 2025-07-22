@@ -3,6 +3,8 @@ import axios from 'axios';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
 import AddDutyModal from './duties/AddDutyModal';
+import EditAssigneeModal from './assignments/EditAssigneeModal';
+import ConfirmationModal from './common/ConfirmationModal';
 
 const Calendar = () => {
   const [assignments, setAssignments] = useState([]);
@@ -11,7 +13,12 @@ const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [resetting, setResetting] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
+  const [showCompletionConfirmation, setShowCompletionConfirmation] = useState(false);
+  const [assignmentToComplete, setAssignmentToComplete] = useState(null);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +48,16 @@ const Calendar = () => {
     
     fetchData();
   }, [currentDate]);
+  
+  // Add responsive handler
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   const getStartOfWeek = (date) => {
     const d = new Date(date);
@@ -112,6 +129,36 @@ const Calendar = () => {
     }
   };
   
+  const handleCompleteClick = (assignment) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time part for accurate date comparison
+    
+    const assignmentDate = new Date(assignment.assigned_date);
+    assignmentDate.setHours(0, 0, 0, 0);
+    
+    // If the assignment date is today or in the past, complete it directly
+    if (assignmentDate <= today) {
+      markAsCompleted(assignment.id);
+    } else {
+      // If the assignment date is in the future, show confirmation modal
+      setAssignmentToComplete(assignment);
+      setShowCompletionConfirmation(true);
+    }
+  };
+  
+  const confirmCompletion = () => {
+    if (assignmentToComplete) {
+      markAsCompleted(assignmentToComplete.id);
+      setShowCompletionConfirmation(false);
+      setAssignmentToComplete(null);
+    }
+  };
+  
+  const cancelCompletion = () => {
+    setShowCompletionConfirmation(false);
+    setAssignmentToComplete(null);
+  };
+  
   const markAsCompleted = async (id) => {
     try {
       await axios.put(`/api/assignments/${id}/complete`);
@@ -158,6 +205,11 @@ const Calendar = () => {
     setCurrentDate(prev);
   };
   
+  const goToCurrentWeek = () => {
+    setCurrentDate(new Date());
+    toast.info('Returned to current week');
+  };
+  
   const resetWeek = async () => {
     if (window.confirm('Are you sure you want to reset all assignments for this week? This action cannot be undone.')) {
       try {
@@ -190,23 +242,53 @@ const Calendar = () => {
     setSelectedDate(null);
   };
   
+  const openEditAssigneeModal = (assignment) => {
+    setSelectedAssignment(assignment);
+    setShowEditModal(true);
+  };
+  
+  const closeEditAssigneeModal = () => {
+    setShowEditModal(false);
+    setSelectedAssignment(null);
+  };
+  
   const handleDutyAdded = (newAssignment) => {
     setAssignments([...assignments, newAssignment]);
   };
   
+  const handleAssigneeUpdated = (updatedAssignment) => {
+    setAssignments(
+      assignments.map(a => 
+        a.id === updatedAssignment.id ? updatedAssignment : a
+      )
+    );
+  };
+  
   const daysOfWeek = getDaysOfWeek();
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const shortDayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   
   if (loading) {
     return <div className="text-center mt-3">Loading calendar...</div>;
   }
+  
+  // Helper function to get abbreviated day name for mobile
+  const getDayName = (index) => {
+    return isMobileView ? shortDayNames[index] : dayNames[index];
+  };
   
   return (
     <div>
       <h1 className="mb-3">Duty Calendar</h1>
       
       <div className="flex-between mb-3">
-        <div></div>
+        <button 
+          className="btn btn-secondary" 
+          onClick={goToCurrentWeek}
+          title="Go to current week"
+        >
+          {isMobileView ? 'Today' : 'Current Week'}
+        </button>
         <button 
           className="btn btn-danger" 
           onClick={resetWeek}
@@ -216,25 +298,26 @@ const Calendar = () => {
         </button>
       </div>
       
-      <div className="calendar">
+      <div className="responsive-container">
+        <div className="calendar">
         <div className="calendar-header">
           <button className="btn" onClick={prevWeek}>
-            &lt; Previous Week
+            {isMobileView ? '← Prev' : '← Previous Week'}
           </button>
           <h2>
             {formatDate(daysOfWeek[0])} to {formatDate(daysOfWeek[6])}
           </h2>
           <button className="btn" onClick={nextWeek}>
-            Next Week &gt;
+            {isMobileView ? 'Next →' : 'Next Week →'}
           </button>
         </div>
         
         <div className="calendar-grid">
           {/* Day headers */}
-          {dayNames.map((day, index) => (
-            <div key={day} className="calendar-day-header">
-              {day}
-              <div>{formatDate(daysOfWeek[index])}</div>
+          {daysOfWeek.map((day, index) => (
+            <div key={formatDate(day)} className="calendar-day-header">
+              {getDayName(index)}
+              <div>{formatDate(day)}</div>
             </div>
           ))}
           
@@ -269,19 +352,33 @@ const Calendar = () => {
                                   e.stopPropagation();
                                   deleteAssignment(assignment.id);
                                 }}
+                                title="Delete assignment"
                               >
                                 ×
                               </button>
                             </div>
                             <div><small>Assigned to: {assignment.person_name}</small></div>
-                            {assignment.status === 'pending' && (
-                              <button
-                                className="btn btn-sm btn-success mt-1"
-                                onClick={() => markAsCompleted(assignment.id)}
-                              >
-                                Complete
-                              </button>
-                            )}
+                            <div className="duty-actions mt-1">
+                              {assignment.status === 'pending' && (
+                                <>
+                                  <button
+                                    className="btn btn-sm btn-success"
+                                    onClick={() => handleCompleteClick(assignment)}
+                                  >
+                                    {isMobileView ? '✓' : 'Complete'}
+                                  </button>
+                                  <button
+                                    className="btn btn-sm btn-primary ml-1"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      openEditAssigneeModal(assignment);
+                                    }}
+                                  >
+                                    {isMobileView ? '✎' : 'Edit'}
+                                  </button>
+                                </>
+                              )}
+                            </div>
                           </div>
                         )}
                       </Draggable>
@@ -302,6 +399,7 @@ const Calendar = () => {
           </DragDropContext>
         </div>
       </div>
+      </div>
       
       {/* Add Duty Modal */}
       {showAddModal && (
@@ -309,6 +407,25 @@ const Calendar = () => {
           date={selectedDate}
           onClose={closeAddDutyModal}
           onDutyAdded={handleDutyAdded}
+        />
+      )}
+      
+      {/* Edit Assignee Modal */}
+      {showEditModal && selectedAssignment && (
+        <EditAssigneeModal
+          assignment={selectedAssignment}
+          onClose={closeEditAssigneeModal}
+          onAssigneeUpdated={handleAssigneeUpdated}
+        />
+      )}
+      
+      {/* Completion Confirmation Modal */}
+      {showCompletionConfirmation && assignmentToComplete && (
+        <ConfirmationModal
+          title="Confirm Early Completion"
+          message={`This duty is scheduled for ${assignmentToComplete.assigned_date}, which is in the future. Are you sure you want to mark it as completed now?`}
+          onConfirm={confirmCompletion}
+          onCancel={cancelCompletion}
         />
       )}
     </div>

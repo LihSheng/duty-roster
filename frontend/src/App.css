@@ -223,6 +223,9 @@ textarea {
 .btn-secondary {
   background: var(--secondary-color);
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-danger {
@@ -249,6 +252,7 @@ textarea {
   background: #fff;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow-x: auto; /* Allow horizontal scrolling on small screens */
 }
 
 .calendar-header {
@@ -260,11 +264,19 @@ textarea {
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.calendar-header h2 {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+  text-align: center;
 }
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(120px, 1fr));
+  min-width: 700px; /* Ensure minimum width for scrolling on mobile */
 }
 
 .calendar-day {
@@ -279,6 +291,7 @@ textarea {
   padding: 0.5rem;
   background: #f4f4f4;
   font-weight: bold;
+  font-size: 0.9rem;
 }
 
 .calendar-date {
@@ -318,6 +331,7 @@ textarea {
   border-radius: 3px;
   cursor: pointer;
   font-size: 0.9rem;
+  word-break: break-word; /* Prevent long duty names from overflowing */
 }
 
 .duty-item.completed {
@@ -326,6 +340,23 @@ textarea {
 
 .duty-item.overdue {
   background: var(--danger-color);
+}
+
+.duty-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+}
+
+.duty-actions button {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 0.5rem; /* Smaller padding for mobile */
+  font-size: 0.8rem; /* Smaller font for mobile */
+}
+
+.ml-1 {
+  margin-left: 0.5rem;
 }
 
 /* Dashboard */
@@ -408,15 +439,20 @@ textarea {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 1rem; /* Add padding for small screens */
 }
 
 .modal {
   background: #fff;
   border-radius: 5px;
   width: 500px;
-  max-width: 90%;
+  max-width: 95%;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+.confirmation-modal {
+  width: 400px;
 }
 
 .modal-header {
@@ -425,6 +461,11 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
 }
 
 .modal-body {
@@ -436,6 +477,12 @@ textarea {
   border-top: 1px solid #eee;
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+  gap: 0.5rem;
+}
+
+.modal-footer button {
+  margin: 0.25rem;
 }
 
 /* Utilities */
@@ -531,5 +578,123 @@ textarea {
   .navbar ul {
     justify-content: center;
     margin-top: 0.5rem;
+  }
+  
+  /* Calendar responsive styles */
+  .calendar-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .calendar-header button {
+    width: 100%;
+    margin: 0.25rem 0;
+  }
+  
+  /* Make buttons more touch-friendly on mobile */
+  .btn {
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Adjust form elements for mobile */
+  .form-group {
+    margin: 0.75rem 0;
+  }
+  
+  /* Adjust table for mobile */
+  .table th,
+  .table td {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Adjust days grid for frequency selector */
+  .days-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+  }
+  
+  /* Make day names shorter on mobile */
+  .calendar-day-header {
+    font-size: 0.8rem;
+    padding: 0.25rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  /* Make buttons even more compact on very small screens */
+  .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Adjust modal for very small screens */
+  .modal {
+    max-width: 98%;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  /* Further adjust days grid */
+  .days-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}/*
+ Additional responsive styles */
+.responsive-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Improve touch targets for mobile */
+.btn-sm {
+  min-height: 30px;
+  min-width: 30px;
+}
+
+/* Improve form elements on mobile */
+@media (max-width: 768px) {
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='date'],
+  input[type='tel'],
+  select,
+  textarea {
+    font-size: 16px; /* Prevent zoom on focus in iOS */
+    padding: 0.5rem;
+  }
+  
+  /* Improve button spacing in modals */
+  .modal-footer {
+    justify-content: space-between;
+  }
+  
+  /* Make duty items more compact on mobile */
+  .duty-item {
+    padding: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  /* Improve calendar day sizing */
+  .calendar-day {
+    min-height: 100px;
   }
 }
