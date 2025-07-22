@@ -286,12 +286,27 @@ textarea {
   position: relative;
 }
 
+.calendar-day.past-date {
+  background-color: #f9f9f9;
+  opacity: 0.85;
+}
+
 .calendar-day-header {
   text-align: center;
   padding: 0.5rem;
   background: #f4f4f4;
   font-weight: bold;
   font-size: 0.9rem;
+}
+
+.calendar-day-header.today {
+  background: var(--primary-color);
+  color: white;
+}
+
+.calendar-day-header.past-date {
+  background: #e9e9e9;
+  color: #777;
 }
 
 .calendar-date {
@@ -322,6 +337,14 @@ textarea {
   color: #999;
 }
 
+.past-date-indicator {
+  margin-top: 10px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  opacity: 0.7;
+}
+
 /* Duty Items */
 .duty-item {
   background: var(--primary-color);
@@ -340,6 +363,26 @@ textarea {
 
 .duty-item.overdue {
   background: var(--danger-color);
+}
+
+.duty-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.completed-badge {
+  background-color: white;
+  color: var(--success-color);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  margin-left: 5px;
+  font-weight: bold;
 }
 
 .duty-actions {

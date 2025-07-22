@@ -314,12 +314,24 @@ const Calendar = () => {
         
         <div className="calendar-grid">
           {/* Day headers */}
-          {daysOfWeek.map((day, index) => (
-            <div key={formatDate(day)} className="calendar-day-header">
-              {getDayName(index)}
-              <div>{formatDate(day)}</div>
-            </div>
-          ))}
+          {daysOfWeek.map((day, index) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const dayDate = new Date(day);
+            dayDate.setHours(0, 0, 0, 0);
+            const isToday = dayDate.getTime() === today.getTime();
+            const isPast = dayDate < today;
+            
+            return (
+              <div 
+                key={formatDate(day)} 
+                className={`calendar-day-header ${isToday ? 'today' : ''} ${isPast ? 'past-date' : ''}`}
+              >
+                {getDayName(index)}
+                <div>{formatDate(day)}</div>
+              </div>
+            );
+          })}
           
           {/* Calendar days */}
           <DragDropContext onDragEnd={handleDragEnd}>
@@ -327,7 +339,13 @@ const Calendar = () => {
               <Droppable key={formatDate(day)} droppableId={formatDate(day)}>
                 {(provided) => (
                   <div
-                    className="calendar-day"
+                    className={`calendar-day ${(() => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      const dayDate = new Date(day);
+                      dayDate.setHours(0, 0, 0, 0);
+                      return dayDate < today ? 'past-date' : '';
+                    })()}`}
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                   >
@@ -346,18 +364,26 @@ const Calendar = () => {
                           >
                             <div className="flex-between">
                               <div>{assignment.duty_name}</div>
-                              <button 
-                                className="btn btn-sm btn-danger"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  deleteAssignment(assignment.id);
-                                }}
-                                title="Delete assignment"
-                              >
-                                ×
-                              </button>
+                              {/* Only show delete button for pending duties */}
+                              {assignment.status === 'pending' && (
+                                <button 
+                                  className="btn btn-sm btn-danger"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteAssignment(assignment.id);
+                                  }}
+                                  title="Delete assignment"
+                                >
+                                  ×
+                                </button>
+                              )}
                             </div>
-                            <div><small>Assigned to: {assignment.person_name}</small></div>
+                            <div className="duty-info">
+                              <small>Assigned to: {assignment.person_name}</small>
+                              {assignment.status === 'completed' && (
+                                <span className="completed-badge" title="Completed">✓</span>
+                              )}
+                            </div>
                             <div className="duty-actions mt-1">
                               {assignment.status === 'pending' && (
                                 <>
@@ -385,13 +411,33 @@ const Calendar = () => {
                     ))}
                     {provided.placeholder}
                     
-                    {/* Add duty button */}
-                    <div 
-                      className="add-duty-button"
-                      onClick={() => openAddDutyModal(formatDate(day))}
-                    >
-                      <span>+</span>
-                    </div>
+                    {/* Add duty button - only show for today and future dates */}
+                    {(() => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0); // Reset time part for accurate date comparison
+                      
+                      const dayDate = new Date(day);
+                      dayDate.setHours(0, 0, 0, 0);
+                      
+                      // Only show add button if the date is today or in the future
+                      if (dayDate >= today) {
+                        return (
+                          <div 
+                            className="add-duty-button"
+                            onClick={() => openAddDutyModal(formatDate(day))}
+                          >
+                            <span>+</span>
+                          </div>
+                        );
+                      }
+                      
+                      // For past dates, show a disabled indicator or nothing
+                      return (
+                        <div className="past-date-indicator">
+                          <small>Past date</small>
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
               </Droppable>
