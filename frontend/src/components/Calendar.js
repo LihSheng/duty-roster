@@ -3,6 +3,7 @@ import axios from 'axios';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
 import AddDutyModal from './duties/AddDutyModal';
+import EditAssigneeModal from './assignments/EditAssigneeModal';
 
 const Calendar = () => {
   const [assignments, setAssignments] = useState([]);
@@ -11,7 +12,9 @@ const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [resetting, setResetting] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -190,8 +193,26 @@ const Calendar = () => {
     setSelectedDate(null);
   };
   
+  const openEditAssigneeModal = (assignment) => {
+    setSelectedAssignment(assignment);
+    setShowEditModal(true);
+  };
+  
+  const closeEditAssigneeModal = () => {
+    setShowEditModal(false);
+    setSelectedAssignment(null);
+  };
+  
   const handleDutyAdded = (newAssignment) => {
     setAssignments([...assignments, newAssignment]);
+  };
+  
+  const handleAssigneeUpdated = (updatedAssignment) => {
+    setAssignments(
+      assignments.map(a => 
+        a.id === updatedAssignment.id ? updatedAssignment : a
+      )
+    );
   };
   
   const daysOfWeek = getDaysOfWeek();
@@ -274,14 +295,27 @@ const Calendar = () => {
                               </button>
                             </div>
                             <div><small>Assigned to: {assignment.person_name}</small></div>
-                            {assignment.status === 'pending' && (
-                              <button
-                                className="btn btn-sm btn-success mt-1"
-                                onClick={() => markAsCompleted(assignment.id)}
-                              >
-                                Complete
-                              </button>
-                            )}
+                            <div className="duty-actions mt-1">
+                              {assignment.status === 'pending' && (
+                                <>
+                                  <button
+                                    className="btn btn-sm btn-success"
+                                    onClick={() => markAsCompleted(assignment.id)}
+                                  >
+                                    Complete
+                                  </button>
+                                  <button
+                                    className="btn btn-sm btn-primary ml-1"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      openEditAssigneeModal(assignment);
+                                    }}
+                                  >
+                                    Edit
+                                  </button>
+                                </>
+                              )}
+                            </div>
                           </div>
                         )}
                       </Draggable>
@@ -309,6 +343,15 @@ const Calendar = () => {
           date={selectedDate}
           onClose={closeAddDutyModal}
           onDutyAdded={handleDutyAdded}
+        />
+      )}
+      
+      {/* Edit Assignee Modal */}
+      {showEditModal && selectedAssignment && (
+        <EditAssigneeModal
+          assignment={selectedAssignment}
+          onClose={closeEditAssigneeModal}
+          onAssigneeUpdated={handleAssigneeUpdated}
         />
       )}
     </div>

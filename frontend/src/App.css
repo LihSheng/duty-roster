@@ -328,6 +328,15 @@ textarea {
   background: var(--danger-color);
 }
 
+.duty-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ml-1 {
+  margin-left: 0.5rem;
+}
+
 /* Dashboard */
 .dashboard-stats {
   display: grid;
