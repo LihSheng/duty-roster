@@ -10,6 +10,7 @@ A web application for managing cleaning duties and other routine tasks in a team
     -   Monthly duties (specific day of month, e.g., last Friday)
     -   Custom frequency options
     -   User-defined duties (no default duties required)
+    -   Group duties that can be assigned to multiple people simultaneously
 -   **People Management**: Add team members with contact information
 -   **Calendar View**: Drag-and-drop interface for duty assignments
 -   **Notifications**: Email and WhatsApp notifications for duty assignments and reminders
@@ -68,6 +69,7 @@ WHATSAPP_API_TOKEN=
     - Set custom frequencies (daily, weekly, monthly, or specific days)
     - Add detailed descriptions for each duty
     - No default duties are created - all duties are user-defined
+    - Create group duties that apply to multiple or all team members
 3. **Generate Assignments**: Use the admin panel to generate weekly assignments
 4. **Manage Calendar**: Use the drag-and-drop calendar to adjust assignments as needed
 5. **Track Completion**: Team members can mark duties as completed when done
