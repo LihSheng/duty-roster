@@ -172,6 +172,11 @@ const Calendar = () => {
     setCurrentDate(prev);
   };
   
+  const goToCurrentWeek = () => {
+    setCurrentDate(new Date());
+    toast.info('Returned to current week');
+  };
+  
   const resetWeek = async () => {
     if (window.confirm('Are you sure you want to reset all assignments for this week? This action cannot be undone.')) {
       try {
@@ -244,7 +249,13 @@ const Calendar = () => {
       <h1 className="mb-3">Duty Calendar</h1>
       
       <div className="flex-between mb-3">
-        <div></div>
+        <button 
+          className="btn btn-secondary" 
+          onClick={goToCurrentWeek}
+          title="Go to current week"
+        >
+          {isMobileView ? 'Today' : 'Current Week'}
+        </button>
         <button 
           className="btn btn-danger" 
           onClick={resetWeek}

@@ -223,6 +223,9 @@ textarea {
 .btn-secondary {
   background: var(--secondary-color);
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-danger {
