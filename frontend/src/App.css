@@ -451,6 +451,10 @@ textarea {
   overflow-y: auto;
 }
 
+.confirmation-modal {
+  width: 400px;
+}
+
 .modal-header {
   padding: 1rem;
   border-bottom: 1px solid #eee;

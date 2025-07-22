@@ -4,6 +4,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
 import AddDutyModal from './duties/AddDutyModal';
 import EditAssigneeModal from './assignments/EditAssigneeModal';
+import ConfirmationModal from './common/ConfirmationModal';
 
 const Calendar = () => {
   const [assignments, setAssignments] = useState([]);
@@ -16,6 +17,8 @@ const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
+  const [showCompletionConfirmation, setShowCompletionConfirmation] = useState(false);
+  const [assignmentToComplete, setAssignmentToComplete] = useState(null);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -124,6 +127,36 @@ const Calendar = () => {
       console.error('Error updating assignment:', error);
       toast.error('Failed to move assignment');
     }
+  };
+  
+  const handleCompleteClick = (assignment) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time part for accurate date comparison
+    
+    const assignmentDate = new Date(assignment.assigned_date);
+    assignmentDate.setHours(0, 0, 0, 0);
+    
+    // If the assignment date is today or in the past, complete it directly
+    if (assignmentDate <= today) {
+      markAsCompleted(assignment.id);
+    } else {
+      // If the assignment date is in the future, show confirmation modal
+      setAssignmentToComplete(assignment);
+      setShowCompletionConfirmation(true);
+    }
+  };
+  
+  const confirmCompletion = () => {
+    if (assignmentToComplete) {
+      markAsCompleted(assignmentToComplete.id);
+      setShowCompletionConfirmation(false);
+      setAssignmentToComplete(null);
+    }
+  };
+  
+  const cancelCompletion = () => {
+    setShowCompletionConfirmation(false);
+    setAssignmentToComplete(null);
   };
   
   const markAsCompleted = async (id) => {
@@ -330,7 +363,7 @@ const Calendar = () => {
                                 <>
                                   <button
                                     className="btn btn-sm btn-success"
-                                    onClick={() => markAsCompleted(assignment.id)}
+                                    onClick={() => handleCompleteClick(assignment)}
                                   >
                                     {isMobileView ? '✓' : 'Complete'}
                                   </button>
@@ -383,6 +416,16 @@ const Calendar = () => {
           assignment={selectedAssignment}
           onClose={closeEditAssigneeModal}
           onAssigneeUpdated={handleAssigneeUpdated}
+        />
+      )}
+      
+      {/* Completion Confirmation Modal */}
+      {showCompletionConfirmation && assignmentToComplete && (
+        <ConfirmationModal
+          title="Confirm Early Completion"
+          message={`This duty is scheduled for ${assignmentToComplete.assigned_date}, which is in the future. Are you sure you want to mark it as completed now?`}
+          onConfirm={confirmCompletion}
+          onCancel={cancelCompletion}
         />
       )}
     </div>
