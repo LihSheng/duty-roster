@@ -1,6 +1,8 @@
-# Duty Roster Application
+# 🧹 Duty Roster Application
 
-A web application for managing cleaning duties and other routine tasks in a team or household. The application allows for creating a rotation of people to handle daily, weekly, monthly, or custom frequency duties, with notifications and tracking.
+A modern web application for managing cleaning duties and routine tasks in households, shared accommodations, or teams. Features an intuitive drag-and-drop calendar interface, automated scheduling, and comprehensive notification system.
+
+![Duty Roster Demo](https://img.shields.io/badge/Demo-Available-green) ![Node.js](https://img.shields.io/badge/Node.js-18+-green) ![React](https://img.shields.io/badge/React-18+-blue) ![SQLite](https://img.shields.io/badge/Database-SQLite-lightgrey)
 
 ## Features
 
@@ -30,90 +32,257 @@ A web application for managing cleaning duties and other routine tasks in a team
 -   **CI/CD**: GitHub Actions workflow for automated deployment to Google Cloud
 -   **Scheduling**: Node-cron for automated task scheduling and reminders
 
-## Installation
+## 🚀 Quick Start
 
-1. Clone the repository
-2. Install dependencies:
-    ```
-    npm run install-all
-    ```
-3. Configure environment variables in `.env` file
-4. Start the development server:
-    ```
-    npm run dev
-    ```
-5. Start the frontend server:
-    ```
-    cd frontend
-    npm start
-    ```
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
 
-## Environment Variables
+### Installation
 
-Create a `.env` file in the root directory with the following variables:
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd duty-roster
+   ```
 
-```
-PORT=5000
+2. **Install dependencies**
+   ```bash
+   npm run install-all
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+4. **Seed the database with demo data** (optional)
+   ```bash
+   npm run seed
+   ```
+
+5. **Start the application**
+   ```bash
+   # Development mode (backend + frontend)
+   npm run dev
+   
+   # Or start separately:
+   npm start              # Backend (http://localhost:5000)
+   cd frontend && npm start  # Frontend (http://localhost:3000)
+   ```
+
+6. **Access the application**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:5000
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory based on `.env.example`:
+
+```bash
+# Application Settings
 NODE_ENV=development
+PORT=5000
+APP_NAME=Duty Roster
+BASE_URL=http://localhost:5000
 
-# Email Configuration
+# Database (SQLite - usually no config needed)
+DB_PATH=./database/duty_roster.db
+
+# Email Configuration (for notifications)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
+SMTP_PASS=your-gmail-app-password
+EMAIL_FROM=your-email@gmail.com
 
 # WhatsApp Configuration (optional)
-WHATSAPP_API_URL=
-WHATSAPP_API_TOKEN=
+WHATSAPP_API_URL=https://api.whatsapp.com/v1/messages
+WHATSAPP_API_TOKEN=your-whatsapp-api-token
+
+# Notification Settings
+REMINDER_DAYS=1  # Days before due date to send reminders
+
+# Security (generate random strings for production)
+SESSION_SECRET=your-session-secret-here
+JWT_SECRET=your-jwt-secret-here
 ```
 
-## Usage
+### Gmail Setup for Notifications
 
-1. **Add People**: Add team members who will participate in the duty roster
-2. **Create Duties**: Define duties that need to be performed (e.g., trash disposal, floor cleaning)
-    - Set custom frequencies (daily, weekly, monthly, or specific days)
-    - Add detailed descriptions for each duty
-    - No default duties are created - all duties are user-defined
-    - Create group duties that apply to multiple or all team members
-3. **Generate Assignments**: Use the admin panel to generate weekly assignments
-4. **Manage Calendar**: Use the drag-and-drop calendar to adjust assignments as needed
-5. **Track Completion**: Team members can mark duties as completed when done
-6. **Manage Overdue Tasks**: Admin can track and send reminders for overdue tasks
-7. **Receive Notifications**: Get email or WhatsApp notifications for upcoming and overdue duties
-8. **Custom Assignments**: Manually assign duties to specific people for specific dates
-9. **Navigation**: Use the elegant navigation bar to move between different sections of the application
-10. **Deployment**: Automatically deploy to Google Cloud when pushing to the master branch
+1. Enable 2-Factor Authentication on your Gmail account
+2. Go to Google Account settings → Security → App passwords
+3. Generate an app password for "Mail"
+4. Use the 16-character app password in `SMTP_PASS`
 
-## Development
+## 📖 Usage Guide
 
--   Backend API runs on `http://localhost:5000`
--   Frontend development server runs on `http://localhost:3000`
+### Getting Started with Demo Data
 
-## Deployment
+If you seeded the database, you'll have:
+- **6 sample people** (Alice, Bob, Carol, David, Emma, Frank)
+- **8 realistic duties** (Kitchen cleaning, bathroom cleaning, etc.)
+- **49 assignments** spanning past week and next 2 weeks
 
-The application includes a GitHub Actions workflow for automatic deployment to Google Cloud App Engine:
+### Core Workflow
 
-1. Push your changes to the `master` branch
-2. The workflow will automatically:
-    - Install dependencies
-    - Build the frontend
-    - Deploy to Google Cloud App Engine
+1. **👥 People Management**
+   - Navigate to "People" to add household members
+   - Include names, emails, and phone numbers for notifications
+   - Activate/deactivate people as needed
 
-### Required GitHub Secrets
+2. **🧹 Duty Setup**
+   - Go to "Duties" to create cleaning tasks
+   - Set frequencies: Daily, Weekly (specific days), or Custom
+   - Add detailed descriptions and mark group duties
+   - Examples: "Kitchen Cleaning" (daily), "Bathroom" (weekly - Monday)
 
-To enable the automatic deployment, add these secrets to your GitHub repository:
+3. **📅 Calendar Management**
+   - Use the drag-and-drop calendar to assign duties
+   - Move assignments between people and dates
+   - Visual status indicators: Pending, Completed, Overdue
 
--   `GCP_PROJECT_ID`: Your Google Cloud project ID
--   `GCP_SA_KEY`: Base64-encoded service account key with App Engine Admin permissions
+4. **✅ Task Completion**
+   - Click on assignments to mark as complete
+   - Add completion notes if needed
+   - Track completion rates and overdue tasks
 
-## Scripts
+5. **⚙️ Admin Controls**
+   - Generate weekly assignments automatically
+   - Send reminder notifications
+   - Manage application settings
 
--   `npm run dev`: Start backend server with nodemon
--   `npm run client`: Start frontend development server
--   `npm start`: Start production server
--   `npm run build`: Build frontend for production
--   `npm run install-all`: Install dependencies for both frontend and backend
+### Key Features
 
-## License
+- **🎯 Smart Assignment**: Prevents duplicate assignments for same date
+- **📱 Responsive Design**: Works on desktop, tablet, and mobile
+- **🔔 Notifications**: Email reminders for upcoming and overdue duties
+- **📊 Progress Tracking**: Visual completion status and history
+- **🎨 Modern UI**: Clean interface with dark/light theme support
 
-MIT
+## 🛠️ Development
+
+### Project Structure
+```
+duty-roster/
+├── backend/
+│   ├── database/           # SQLite database and schema
+│   ├── routes/            # API endpoints
+│   ├── services/          # Business logic (notifications, scheduler)
+│   └── server.js          # Express server
+├── frontend/
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── utils/         # Helper functions
+│   │   └── styles/        # Tailwind CSS
+│   └── webpack.config.js  # Build configuration
+├── scripts/               # Database utilities
+└── .env.example          # Environment template
+```
+
+### Development Servers
+- **Backend API**: http://localhost:5000
+- **Frontend**: http://localhost:3000
+- **Database**: SQLite file at `database/duty_roster.db`
+
+### API Endpoints
+- `GET/POST /api/people` - People management
+- `GET/POST /api/duties` - Duty management  
+- `GET/POST /api/assignments` - Assignment management
+- `POST /api/admin/generate-assignments` - Generate weekly assignments
+- `POST /api/notifications/send-reminders` - Send notifications
+
+## 🚀 Deployment
+
+### Render (Recommended)
+
+1. **Connect your repository** to Render
+2. **Set build commands**:
+   - **Build Command**: `npm run install-all && npm run build`
+   - **Start Command**: `npm start`
+3. **Configure environment variables** in Render dashboard
+4. **Deploy** - automatic deployments on git push
+
+### Manual Deployment
+
+```bash
+# Build for production
+npm run install-all
+npm run build
+
+# Start production server
+NODE_ENV=production npm start
+```
+
+### Environment Variables for Production
+
+Set these in your deployment platform:
+
+```bash
+NODE_ENV=production
+PORT=10000  # Or your platform's default
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-gmail-app-password
+EMAIL_FROM=your-email@gmail.com
+```
+
+## 📜 Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Start production server |
+| `npm run dev` | Start development server with auto-reload |
+| `npm run client` | Start frontend development server only |
+| `npm run build` | Build frontend for production |
+| `npm run install-all` | Install all dependencies (backend + frontend) |
+| `npm run seed` | Populate database with demo data |
+| `npm run reset-db` | Reset database to empty state |
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Port already in use**
+```bash
+# Kill process on port 3000 or 5000
+npx kill-port 3000
+npx kill-port 5000
+```
+
+**Database locked**
+```bash
+# Reset database
+npm run reset-db
+npm run seed
+```
+
+**Build failures**
+```bash
+# Clear node_modules and reinstall
+rm -rf node_modules frontend/node_modules
+npm run install-all
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with React, Node.js, and SQLite
+- UI components styled with Tailwind CSS
+- Drag-and-drop powered by react-beautiful-dnd
+- Notifications via Nodemailer

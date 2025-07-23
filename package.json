@@ -1,14 +1,36 @@
 {
   "name": "duty-roster",
   "version": "1.0.0",
-  "description": "A duty roster application for managing cleaning schedules",
+  "description": "A modern web application for managing cleaning duties and routine tasks in households, shared accommodations, or teams. Features drag-and-drop calendar interface, automated scheduling, and comprehensive notification system.",
+  "keywords": [
+    "duty-roster",
+    "cleaning-schedule",
+    "task-management",
+    "household-management",
+    "chore-tracker",
+    "react",
+    "nodejs",
+    "sqlite"
+  ],
+  "author": "Duty Roster Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/duty-roster.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/duty-roster/issues"
+  },
+  "homepage": "https://github.com/your-username/duty-roster#readme",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
     "client": "cd frontend && npm start",
     "build": "cd frontend && npm run build",
-    "install-all": "npm install && cd frontend && npm install"
+    "install-all": "npm install && cd frontend && npm install",
+    "seed": "node scripts/seed-database.js",
+    "reset-db": "node scripts/reset-database.js"
   },
   "dependencies": {
     "express": "^4.18.2",
