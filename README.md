@@ -42,6 +42,11 @@ A web application for managing cleaning duties and other routine tasks in a team
     ```
     npm run dev
     ```
+5. Start the frontend server:
+    ```
+    cd frontend
+    npm start
+    ```
 
 ## Environment Variables
 
