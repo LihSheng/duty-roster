@@ -195,9 +195,15 @@ module.exports = {
         primary: {
           50: '#f0f9ff',
           100: '#e0f2fe',
-          // ... other shades
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0ea5e9',
           600: '#0284c7',
           700: '#0369a1',
+          800: '#075985',
+          900: '#0c4a6e',
+          950: '#082f49',
         },
         // ... other color definitions
       },
@@ -207,6 +213,53 @@ module.exports = {
   plugins: [
     // ... plugins
   ],
+};
+```
+
+### Navigation Styling
+
+The navigation bar uses a modern, elegant design with the following key features:
+
+1. **Color Scheme**: Uses `bg-primary-700` for a professional blue background that provides good contrast for white text
+2. **Layout**: Aligns the title and navigation links on the same horizontal line for better space utilization
+3. **Active State**: Highlights the current page with a subtle white underline and bolder text
+4. **Hover Effects**: Provides visual feedback with color transitions on hover
+5. **Responsive Design**: Uses container classes to ensure proper alignment across different screen sizes
+
+Example implementation:
+
+```jsx
+// Navbar.js
+const Navbar = () => {
+  const location = useLocation();
+  
+  return (
+    <nav className="navbar bg-primary-700 text-white p-3 shadow-md">
+      <div className="container mx-auto flex items-center justify-between">
+        <div className="flex items-center">
+          <h1 className="logo text-xl font-bold mr-8">
+            <Link to="/">Duty Roster</Link>
+          </h1>
+          <ul className="flex space-x-6">
+            <li>
+              <Link 
+                to="/" 
+                className={`hover:text-primary-200 transition-colors ${
+                  location.pathname === '/' 
+                    ? 'text-white font-medium border-b-2 border-white pb-1' 
+                    : 'text-primary-100'
+                }`}
+              >
+                Dashboard
+              </Link>
+            </li>
+            {/* Other navigation links */}
+          </ul>
+        </div>
+        <ThemeToggle />
+      </div>
+    </nav>
+  );
 };
 ```
 
@@ -389,3 +442,26 @@ To ensure optimal performance:
 3. React.memo will be used for components that don't need frequent re-renders
 4. Event handlers will be memoized with useCallback
 5. Component state will be optimized to avoid unnecessary updates
+## UI Design Principles
+
+The application follows these key UI design principles:
+
+1. **Visual Hierarchy**: Important elements like the navigation bar use stronger colors (primary-700) to establish hierarchy
+2. **Alignment**: Elements are aligned horizontally and vertically for a clean, organized appearance
+3. **Consistency**: UI components maintain consistent styling across the application
+4. **Feedback**: Interactive elements provide visual feedback through hover states and active indicators
+5. **Accessibility**: High contrast between text and background colors ensures readability
+6. **Simplicity**: Clean, uncluttered interfaces with appropriate spacing between elements
+7. **Responsive Design**: Components adapt to different screen sizes using Tailwind's responsive utilities
+
+### Navigation Design
+
+The navigation system follows these specific principles:
+
+1. **Horizontal Alignment**: Title and navigation options are aligned on the same line for efficient space usage
+2. **Current Page Indicator**: Active page is highlighted with an underline and bolder text
+3. **Color Contrast**: Light text on dark background for readability
+4. **Consistent Spacing**: Even spacing between navigation items
+5. **Container-Based Layout**: Centered content with appropriate margins
+6. **Visual Separation**: Shadow effect to separate the navigation from the main content
+7. **Interactive Feedback**: Hover effects to indicate clickable elements

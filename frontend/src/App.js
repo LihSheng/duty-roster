@@ -22,7 +22,7 @@ function App() {
       <Router>
         <div className="app min-h-screen transition-colors duration-200">
           <Navbar />
-          <main className="container pt-6">
+          <main className="container mx-auto pt-6">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/calendar" element={<Calendar />} />
