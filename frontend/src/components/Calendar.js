@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import AddDutyModal from './duties/AddDutyModal';
 import EditAssigneeModal from './assignments/EditAssigneeModal';
 import ConfirmationModal from './common/ConfirmationModal';
+import Button from './common/ui/Button'; // Import the Button component
 
 const Calendar = () => {
   const [assignments, setAssignments] = useState([]);
@@ -282,44 +283,56 @@ const Calendar = () => {
       <h1 className="mb-3">Duty Calendar</h1>
       
       <div className="flex-between mb-3">
-        <button 
-          className="btn btn-secondary" 
+        <Button 
+          variant="secondary" 
           onClick={goToCurrentWeek}
           title="Go to current week"
         >
           {isMobileView ? 'Today' : 'Current Week'}
-        </button>
-        <button 
-          className="btn btn-danger" 
+        </Button>
+        <Button 
+          variant="danger" 
           onClick={resetWeek}
           disabled={resetting || assignments.length === 0}
         >
           {resetting ? 'Resetting...' : 'Reset All Assignments'}
-        </button>
+        </Button>
       </div>
       
       <div className="responsive-container">
         <div className="calendar">
         <div className="calendar-header">
-          <button className="btn" onClick={prevWeek}>
+          <Button onClick={prevWeek}>
             {isMobileView ? '← Prev' : '← Previous Week'}
-          </button>
+          </Button>
           <h2>
             {formatDate(daysOfWeek[0])} to {formatDate(daysOfWeek[6])}
           </h2>
-          <button className="btn" onClick={nextWeek}>
+          <Button onClick={nextWeek}>
             {isMobileView ? 'Next →' : 'Next Week →'}
-          </button>
+          </Button>
         </div>
         
         <div className="calendar-grid">
           {/* Day headers */}
-          {daysOfWeek.map((day, index) => (
-            <div key={formatDate(day)} className="calendar-day-header">
-              {getDayName(index)}
-              <div>{formatDate(day)}</div>
-            </div>
-          ))}
+          {daysOfWeek.map((day, index) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const dayDate = new Date(day);
+            dayDate.setHours(0, 0, 0, 0);
+            const isToday = dayDate.getTime() === today.getTime();
+            const isPast = dayDate < today;
+            
+            return (
+              <div 
+                key={formatDate(day)} 
+                className={`calendar-day-header ${isToday ? 'today' : ''} ${isPast ? 'past-date' : ''}`}
+              >
+                {getDayName(index)}
+                <div>{formatDate(day)}</div>
+              </div>
+            );
+          })}
           
           {/* Calendar days */}
           <DragDropContext onDragEnd={handleDragEnd}>
@@ -327,7 +340,13 @@ const Calendar = () => {
               <Droppable key={formatDate(day)} droppableId={formatDate(day)}>
                 {(provided) => (
                   <div
-                    className="calendar-day"
+                    className={`calendar-day ${(() => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      const dayDate = new Date(day);
+                      dayDate.setHours(0, 0, 0, 0);
+                      return dayDate < today ? 'past-date' : '';
+                    })()}`}
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                   >
@@ -346,36 +365,47 @@ const Calendar = () => {
                           >
                             <div className="flex-between">
                               <div>{assignment.duty_name}</div>
-                              <button 
-                                className="btn btn-sm btn-danger"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  deleteAssignment(assignment.id);
-                                }}
-                                title="Delete assignment"
-                              >
-                                ×
-                              </button>
+                              {/* Only show delete button for pending duties */}
+                              {assignment.status === 'pending' && (
+                                <button 
+                                  className="btn btn-sm btn-danger"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteAssignment(assignment.id);
+                                  }}
+                                  title="Delete assignment"
+                                >
+                                  ×
+                                </button>
+                              )}
                             </div>
-                            <div><small>Assigned to: {assignment.person_name}</small></div>
+                            <div className="duty-info">
+                              <small>{assignment.person_name}</small>
+                              {assignment.status === 'completed' && (
+                                <span className="completed-badge" title="Completed">✓</span>
+                              )}
+                            </div>
                             <div className="duty-actions mt-1">
                               {assignment.status === 'pending' && (
                                 <>
-                                  <button
-                                    className="btn btn-sm btn-success"
+                                  <Button
+                                    variant="success"
+                                    size="small"
                                     onClick={() => handleCompleteClick(assignment)}
                                   >
                                     {isMobileView ? '✓' : 'Complete'}
-                                  </button>
-                                  <button
-                                    className="btn btn-sm btn-primary ml-1"
+                                  </Button>
+                                  <Button
+                                    variant="primary"
+                                    size="small"
+                                    className="ml-1"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       openEditAssigneeModal(assignment);
                                     }}
                                   >
                                     {isMobileView ? '✎' : 'Edit'}
-                                  </button>
+                                  </Button>
                                 </>
                               )}
                             </div>
@@ -385,13 +415,33 @@ const Calendar = () => {
                     ))}
                     {provided.placeholder}
                     
-                    {/* Add duty button */}
-                    <div 
-                      className="add-duty-button"
-                      onClick={() => openAddDutyModal(formatDate(day))}
-                    >
-                      <span>+</span>
-                    </div>
+                    {/* Add duty button - only show for today and future dates */}
+                    {(() => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0); // Reset time part for accurate date comparison
+                      
+                      const dayDate = new Date(day);
+                      dayDate.setHours(0, 0, 0, 0);
+                      
+                      // Only show add button if the date is today or in the future
+                      if (dayDate >= today) {
+                        return (
+                          <div 
+                            className="add-duty-button"
+                            onClick={() => openAddDutyModal(formatDate(day))}
+                          >
+                            <span>+</span>
+                          </div>
+                        );
+                      }
+                      
+                      // For past dates, show a disabled indicator or nothing
+                      return (
+                        <div className="past-date-indicator">
+                          <small>Past date</small>
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
               </Droppable>

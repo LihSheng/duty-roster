@@ -1,0 +1,225 @@
+/* Import Tailwind's base styles */
+@import 'tailwindcss/base';
+
+/* Import Tailwind's component styles */
+@import 'tailwindcss/components';
+
+/* Import Tailwind's utility styles */
+@import 'tailwindcss/utilities';
+
+/* Custom base styles */
+@layer base {
+  body {
+    @apply bg-light-100 text-dark-900 font-sans;
+  }
+
+  a {
+    @apply text-primary-600 hover:text-primary-800;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  /* Base UI components */
+  .btn {
+    @apply inline-block px-4 py-2 rounded font-medium transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-600 text-white hover:bg-secondary-700;
+  }
+
+  .btn-danger {
+    @apply bg-danger-600 text-white hover:bg-danger-700;
+  }
+
+  .btn-success {
+    @apply bg-secondary-600 text-white hover:bg-secondary-700;
+  }
+
+  .btn-warning {
+    @apply bg-warning-600 text-white hover:bg-warning-700;
+  }
+
+  .btn-sm {
+    @apply px-2 py-1 text-xs;
+  }
+
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .card {
+    @apply bg-white p-6 rounded-lg shadow-md mb-6;
+  }
+
+  /* Form components */
+  .form-group {
+    @apply mb-4;
+  }
+
+  .form-label {
+    @apply block mb-2 font-medium;
+  }
+
+  .form-input {
+    @apply block w-full px-3 py-2 border-2 border-light-400 bg-light-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  input[type="number"],
+  input[type="tel"],
+  textarea,
+  select {
+    @apply block w-full px-3 py-2 border-2 border-light-400 bg-light-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+  }
+
+  .form-error {
+    @apply mt-1 text-sm text-danger-600;
+  }
+
+  /* Modal components */
+  .modal-overlay {
+    @apply fixed inset-0 bg-dark-900/50 flex justify-center items-center z-50 p-4;
+  }
+
+  .modal {
+    @apply bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto;
+  }
+
+  .modal-header {
+    @apply p-4 border-b border-light-200 flex justify-between items-center;
+  }
+
+  .modal-body {
+    @apply p-4;
+  }
+
+  .modal-footer {
+    @apply p-4 border-t border-light-200 flex justify-end gap-2;
+  }
+}
+
+/* Dark mode styles */
+.dark {
+  background-color: #0f172a;
+  color: #f3f4f6;
+}
+
+.dark .card {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+}
+
+.dark .modal {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+}
+
+.dark .modal-header,
+.dark .modal-footer {
+  border-color: #334155;
+}
+
+.dark .form-input,
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="date"],
+.dark input[type="number"],
+.dark input[type="tel"],
+.dark textarea,
+.dark select {
+  background-color: #1e293b;
+  border-color: #475569;
+  border-width: 2px;
+  color: #f3f4f6;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.dark .btn-secondary {
+  background-color: #475569;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #334155;
+}/* Custom i
+nput styles */
+@layer components {
+  /* Checkbox styling */
+  input[type="checkbox"] {
+    @apply w-4 h-4 text-primary-600 bg-light-100 border-2 border-light-400 rounded focus:ring-2 focus:ring-primary-500;
+  }
+
+  /* Radio button styling */
+  input[type="radio"] {
+    @apply w-4 h-4 text-primary-600 bg-light-100 border-2 border-light-400 rounded-full focus:ring-2 focus:ring-primary-500;
+  }
+
+  /* Focus state for all inputs */
+  input:focus, 
+  textarea:focus, 
+  select:focus {
+    @apply border-primary-500 ring-2 ring-primary-500/30;
+  }
+
+  /* Hover state for all inputs */
+  input:hover:not(:disabled):not(:focus), 
+  textarea:hover:not(:disabled):not(:focus), 
+  select:hover:not(:disabled):not(:focus) {
+    @apply border-primary-400;
+  }
+
+  /* Disabled state for all inputs */
+  input:disabled,
+  textarea:disabled,
+  select:disabled {
+    @apply bg-light-200 border-light-300 text-light-500 cursor-not-allowed;
+  }
+}
+
+/* Dark mode input styles */
+.dark input[type="checkbox"],
+.dark input[type="radio"] {
+  background-color: #1e293b;
+  border-color: #475569;
+}
+
+.dark input:disabled,
+.dark textarea:disabled,
+.dark select:disabled {
+  background-color: #0f172a;
+  border-color: #334155;
+  color: #64748b;
+}/* Sel
+ect dropdown styling */
+@layer components {
+  select {
+    @apply appearance-none bg-no-repeat;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+
+  /* Custom placeholder color */
+  ::placeholder {
+    @apply text-light-500;
+  }
+}
+
+/* Dark mode select and placeholder */
+.dark select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+}
+
+.dark ::placeholder {
+  color: #64748b;
+}
