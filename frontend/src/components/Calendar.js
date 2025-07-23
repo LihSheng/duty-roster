@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
+import LazyDragDrop, { useDragDropComponents } from './common/LazyDragDrop';
 import AddDutyModal from './duties/AddDutyModal';
 import EditAssigneeModal from './assignments/EditAssigneeModal';
 import ConfirmationModal from './common/ConfirmationModal';
@@ -20,6 +20,9 @@ const Calendar = () => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
   const [showCompletionConfirmation, setShowCompletionConfirmation] = useState(false);
   const [assignmentToComplete, setAssignmentToComplete] = useState(null);
+  
+  // Get drag and drop components
+  const dragDropComponents = useDragDropComponents();
   
   useEffect(() => {
     const fetchData = async () => {
@@ -335,34 +338,45 @@ const Calendar = () => {
           })}
           
           {/* Calendar days */}
-          <DragDropContext onDragEnd={handleDragEnd}>
-            {daysOfWeek.map((day, index) => (
-              <Droppable key={formatDate(day)} droppableId={formatDate(day)}>
-                {(provided) => (
-                  <div
-                    className={`calendar-day ${(() => {
-                      const today = new Date();
-                      today.setHours(0, 0, 0, 0);
-                      const dayDate = new Date(day);
-                      dayDate.setHours(0, 0, 0, 0);
-                      return dayDate < today ? 'past-date' : '';
-                    })()}`}
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    {getAssignmentsForDay(day).map((assignment, idx) => (
-                      <Draggable
-                        key={`assignment-${assignment.id}`}
-                        draggableId={`assignment-${assignment.id}`}
-                        index={idx}
-                      >
-                        {(provided) => (
-                          <div
-                            className={`duty-item ${assignment.status}`}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
+          <LazyDragDrop onDragEnd={handleDragEnd}>
+            {daysOfWeek.map((day, index) => {
+              const { Droppable, Draggable } = dragDropComponents || {};
+              
+              if (!dragDropComponents) {
+                return (
+                  <div key={formatDate(day)} className="calendar-day">
+                    <div className="text-center p-4">Loading...</div>
+                  </div>
+                );
+              }
+              
+              return (
+                <Droppable key={formatDate(day)} droppableId={formatDate(day)}>
+                  {(provided) => (
+                    <div
+                      className={`calendar-day ${(() => {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        const dayDate = new Date(day);
+                        dayDate.setHours(0, 0, 0, 0);
+                        return dayDate < today ? 'past-date' : '';
+                      })()}`}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {getAssignmentsForDay(day).map((assignment, idx) => (
+                        <Draggable
+                          key={`assignment-${assignment.id}`}
+                          draggableId={`assignment-${assignment.id}`}
+                          index={idx}
+                        >
+                          {(provided) => (
+                            <div
+                              className={`duty-item ${assignment.status}`}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
                             <div className="flex-between">
                               <div>{assignment.duty_name}</div>
                               {/* Only show delete button for pending duties */}
@@ -445,8 +459,9 @@ const Calendar = () => {
                   </div>
                 )}
               </Droppable>
-            ))}
-          </DragDropContext>
+            );
+            })}
+          </LazyDragDrop>
         </div>
       </div>
       </div>
