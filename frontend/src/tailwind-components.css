@@ -1,0 +1,189 @@
+/* Tailwind component classes for the application */
+@layer components {
+  /* Calendar components */
+  .calendar {
+    @apply bg-white rounded-lg shadow-md overflow-x-auto dark:bg-dark-800;
+  }
+
+  .calendar-header {
+    @apply flex justify-between items-center p-4 bg-primary-500 text-white rounded-t-lg flex-wrap dark:bg-primary-700;
+  }
+
+  .calendar-header h2 {
+    @apply m-2 text-lg text-center;
+  }
+
+  .calendar-grid {
+    @apply grid grid-cols-7 min-w-[700px];
+  }
+
+  .calendar-day {
+    @apply border border-light-200 min-h-[120px] p-2 relative dark:border-dark-700;
+  }
+
+  .calendar-day.past-date {
+    @apply bg-light-100 opacity-85 dark:bg-dark-900;
+  }
+
+  .calendar-day-header {
+    @apply text-center p-2 bg-light-200 font-bold text-sm dark:bg-dark-700 dark:text-light-100;
+  }
+
+  .calendar-day-header.today {
+    @apply bg-primary-500 text-white;
+  }
+
+  .calendar-day-header.past-date {
+    @apply bg-light-300 text-light-600 dark:bg-dark-800 dark:text-light-400;
+  }
+
+  /* Duty Items */
+  .duty-item {
+    @apply bg-primary-500 text-white p-2 mb-2 rounded break-words cursor-pointer text-sm;
+  }
+
+  .duty-item.completed {
+    @apply bg-secondary-500;
+  }
+
+  .duty-item.overdue {
+    @apply bg-danger-500;
+  }
+
+  .duty-info {
+    @apply flex justify-between items-center;
+  }
+
+  .completed-badge {
+    @apply bg-white text-secondary-500 rounded-full w-[18px] h-[18px] inline-flex items-center justify-center text-xs ml-1 font-bold;
+  }
+
+  .duty-actions {
+    @apply flex gap-2 flex-wrap;
+  }
+
+  /* Add duty button */
+  .add-duty-button {
+    @apply border-2 border-dashed border-light-300 rounded-md h-10 flex justify-center items-center mt-2.5 cursor-pointer transition-all duration-200 relative z-10 dark:border-dark-600;
+  }
+
+  .add-duty-button:hover {
+    @apply border-primary-500 bg-primary-500/10;
+  }
+
+  .add-duty-button span {
+    @apply text-2xl text-light-500 dark:text-light-400;
+  }
+
+  .past-date-indicator {
+    @apply mt-2.5 text-center text-light-500 italic opacity-70 dark:text-light-400;
+  }
+
+  /* Responsive utilities */
+  .responsive-container {
+    @apply w-full overflow-x-auto;
+  }
+
+  .flex-between {
+    @apply flex justify-between items-center;
+  }
+}  /*
+ Modal fixes */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 flex justify-center items-center z-[1000] p-4;
+  }
+
+  /* Ensure buttons in the modal are clickable */
+  .modal button {
+    @apply cursor-pointer;
+  }
+}/* Add
+itional utility classes */
+@layer utilities {
+  /* Tooltip */
+  .tooltip {
+    @apply relative inline-block ml-2;
+  }
+
+  .tooltip-icon {
+    @apply inline-flex items-center justify-center w-4 h-4 rounded-full bg-light-400 text-white text-xs cursor-help;
+  }
+
+  .tooltip-text {
+    @apply invisible w-[200px] bg-dark-800 text-white text-center rounded-md p-1 absolute z-10 bottom-[125%] left-1/2 -ml-[100px] opacity-0 transition-opacity duration-300 text-xs;
+  }
+
+  .tooltip:hover .tooltip-text {
+    @apply visible opacity-100;
+  }
+
+  /* Form notes */
+  .form-note {
+    @apply mt-4 p-2 bg-light-100 rounded border-l-4 border-warning-500;
+  }
+
+  /* Dashboard */
+  .dashboard-stats {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4;
+  }
+
+  .stat-card {
+    @apply bg-white p-6 rounded-lg shadow-md text-center;
+  }
+
+  .stat-card h3 {
+    @apply text-2xl mb-2;
+  }
+
+  /* Tables */
+  .table {
+    @apply w-full border-collapse mb-4;
+  }
+
+  .table th,
+  .table td {
+    @apply p-3 text-left border-b border-light-200;
+  }
+
+  .table th {
+    @apply bg-light-100;
+  }
+
+  /* Alerts */
+  .alert {
+    @apply p-3 my-4 opacity-90 bg-light-100 text-dark-800 rounded-md;
+  }
+
+  .alert-primary {
+    @apply bg-primary-500 text-white;
+  }
+
+  .alert-danger {
+    @apply bg-danger-500 text-white;
+  }
+
+  .alert-success {
+    @apply bg-secondary-500 text-white;
+  }
+
+  .alert-warning {
+    @apply bg-warning-500 text-white;
+  }
+
+  /* Frequency Selector */
+  .frequency-selector {
+    @apply mb-4;
+  }
+
+  .days-grid {
+    @apply grid grid-cols-7 gap-2 mt-2 sm:grid-cols-7;
+  }
+
+  .day-checkbox {
+    @apply flex flex-col items-center text-center;
+  }
+
+  .monthly-options {
+    @apply border border-light-200 p-4 rounded-md mt-2;
+  }
+}

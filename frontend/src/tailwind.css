@@ -15,6 +15,7 @@
 
 /* Custom component styles */
 @layer components {
+  /* Base UI components */
   .btn {
     @apply inline-block px-4 py-2 rounded font-medium transition-colors;
   }
@@ -39,6 +40,10 @@
     @apply bg-warning-600 text-white hover:bg-warning-700;
   }
 
+  .btn-sm {
+    @apply px-2 py-1 text-xs;
+  }
+
   .container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
@@ -47,6 +52,7 @@
     @apply bg-white p-6 rounded-lg shadow-md mb-6;
   }
 
+  /* Form components */
   .form-group {
     @apply mb-4;
   }
@@ -63,6 +69,7 @@
     @apply mt-1 text-sm text-danger-600;
   }
 
+  /* Modal components */
   .modal-overlay {
     @apply fixed inset-0 bg-dark-900/50 flex justify-center items-center z-50 p-4;
   }

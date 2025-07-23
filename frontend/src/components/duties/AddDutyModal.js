@@ -12,7 +12,6 @@ import TextInput from '../common/ui/TextInput';
 import TextArea from '../common/ui/TextArea';
 import Select from '../common/ui/Select';
 import Checkbox from '../common/ui/Checkbox';
-import './AddDutyModal.css'; // Import the CSS file
 
 /**
  * AddDutyModal component for adding new duties or assigning existing duties

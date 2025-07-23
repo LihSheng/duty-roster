@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from 'react';\r\nimport PropTypes from 'prop-types';\r\nimport { createPortal } from 'react-dom';\r\nimport './modal-fix.css';
+import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
+import { createPortal } from 'react-dom';
 
 /**
  * BaseModal component that serves as the foundation for all modal dialogs

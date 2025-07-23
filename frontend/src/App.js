@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './tailwind.css';
-import './App.css';\nimport './fixes.css';
+import './tailwind-components.css';
 
 // Components
 import Navbar from './components/layout/Navbar';
