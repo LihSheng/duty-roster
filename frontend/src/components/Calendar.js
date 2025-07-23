@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import AddDutyModal from './duties/AddDutyModal';
 import EditAssigneeModal from './assignments/EditAssigneeModal';
 import ConfirmationModal from './common/ConfirmationModal';
+import Button from './common/ui/Button'; // Import the Button component
 
 const Calendar = () => {
   const [assignments, setAssignments] = useState([]);
@@ -282,34 +283,34 @@ const Calendar = () => {
       <h1 className="mb-3">Duty Calendar</h1>
       
       <div className="flex-between mb-3">
-        <button 
-          className="btn btn-secondary" 
+        <Button 
+          variant="secondary" 
           onClick={goToCurrentWeek}
           title="Go to current week"
         >
           {isMobileView ? 'Today' : 'Current Week'}
-        </button>
-        <button 
-          className="btn btn-danger" 
+        </Button>
+        <Button 
+          variant="danger" 
           onClick={resetWeek}
           disabled={resetting || assignments.length === 0}
         >
           {resetting ? 'Resetting...' : 'Reset All Assignments'}
-        </button>
+        </Button>
       </div>
       
       <div className="responsive-container">
         <div className="calendar">
         <div className="calendar-header">
-          <button className="btn" onClick={prevWeek}>
+          <Button onClick={prevWeek}>
             {isMobileView ? '← Prev' : '← Previous Week'}
-          </button>
+          </Button>
           <h2>
             {formatDate(daysOfWeek[0])} to {formatDate(daysOfWeek[6])}
           </h2>
-          <button className="btn" onClick={nextWeek}>
+          <Button onClick={nextWeek}>
             {isMobileView ? 'Next →' : 'Next Week →'}
-          </button>
+          </Button>
         </div>
         
         <div className="calendar-grid">
@@ -387,21 +388,24 @@ const Calendar = () => {
                             <div className="duty-actions mt-1">
                               {assignment.status === 'pending' && (
                                 <>
-                                  <button
-                                    className="btn btn-sm btn-success"
+                                  <Button
+                                    variant="success"
+                                    size="small"
                                     onClick={() => handleCompleteClick(assignment)}
                                   >
                                     {isMobileView ? '✓' : 'Complete'}
-                                  </button>
-                                  <button
-                                    className="btn btn-sm btn-primary ml-1"
+                                  </Button>
+                                  <Button
+                                    variant="primary"
+                                    size="small"
+                                    className="ml-1"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       openEditAssigneeModal(assignment);
                                     }}
                                   >
                                     {isMobileView ? '✎' : 'Edit'}
-                                  </button>
+                                  </Button>
                                 </>
                               )}
                             </div>
