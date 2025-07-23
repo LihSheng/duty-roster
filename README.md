@@ -25,7 +25,7 @@ A web application for managing cleaning duties and other routine tasks in a team
 
 -   **Backend**: Node.js, Express.js
 -   **Database**: SQLite (lightweight, file-based database)
--   **Frontend**: React.js with drag-and-drop calendar interface
+-   **Frontend**: React.js with drag-and-drop calendar interface, Tailwind CSS for styling
 -   **Notifications**: Nodemailer (Email), WhatsApp API integration
 -   **CI/CD**: GitHub Actions workflow for automated deployment to Google Cloud
 -   **Scheduling**: Node-cron for automated task scheduling and reminders
@@ -81,7 +81,8 @@ WHATSAPP_API_TOKEN=
 6. **Manage Overdue Tasks**: Admin can track and send reminders for overdue tasks
 7. **Receive Notifications**: Get email or WhatsApp notifications for upcoming and overdue duties
 8. **Custom Assignments**: Manually assign duties to specific people for specific dates
-9. **Deployment**: Automatically deploy to Google Cloud when pushing to the master branch
+9. **Navigation**: Use the elegant navigation bar to move between different sections of the application
+10. **Deployment**: Automatically deploy to Google Cloud when pushing to the master branch
 
 ## Development
 
