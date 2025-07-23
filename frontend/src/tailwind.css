@@ -1,8 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Import Tailwind's base styles */
+@import 'tailwindcss/base';
 
-/* Custom base styles that should apply after Tailwind's base styles */
+/* Import Tailwind's component styles */
+@import 'tailwindcss/components';
+
+/* Import Tailwind's utility styles */
+@import 'tailwindcss/utilities';
+
+/* Custom base styles */
 @layer base {
   body {
     @apply bg-light-100 text-dark-900 font-sans;
@@ -62,7 +67,18 @@
   }
 
   .form-input {
-    @apply block w-full px-3 py-2 border border-light-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+    @apply block w-full px-3 py-2 border-2 border-light-400 bg-light-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  input[type="number"],
+  input[type="tel"],
+  textarea,
+  select {
+    @apply block w-full px-3 py-2 border-2 border-light-400 bg-light-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
   }
 
   .form-error {
@@ -91,50 +107,119 @@
   }
 }
 
-/* Custom utility styles */
-@layer utilities {
-  .text-center {
-    @apply text-center;
+/* Dark mode styles */
+.dark {
+  background-color: #0f172a;
+  color: #f3f4f6;
+}
+
+.dark .card {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+}
+
+.dark .modal {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+}
+
+.dark .modal-header,
+.dark .modal-footer {
+  border-color: #334155;
+}
+
+.dark .form-input,
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="date"],
+.dark input[type="number"],
+.dark input[type="tel"],
+.dark textarea,
+.dark select {
+  background-color: #1e293b;
+  border-color: #475569;
+  border-width: 2px;
+  color: #f3f4f6;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.dark .btn-secondary {
+  background-color: #475569;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #334155;
+}/* Custom i
+nput styles */
+@layer components {
+  /* Checkbox styling */
+  input[type="checkbox"] {
+    @apply w-4 h-4 text-primary-600 bg-light-100 border-2 border-light-400 rounded focus:ring-2 focus:ring-primary-500;
   }
 
-  .text-right {
-    @apply text-right;
+  /* Radio button styling */
+  input[type="radio"] {
+    @apply w-4 h-4 text-primary-600 bg-light-100 border-2 border-light-400 rounded-full focus:ring-2 focus:ring-primary-500;
   }
 
-  .text-danger {
-    @apply text-danger-600;
+  /* Focus state for all inputs */
+  input:focus, 
+  textarea:focus, 
+  select:focus {
+    @apply border-primary-500 ring-2 ring-primary-500/30;
   }
 
-  .text-success {
-    @apply text-secondary-600;
+  /* Hover state for all inputs */
+  input:hover:not(:disabled):not(:focus), 
+  textarea:hover:not(:disabled):not(:focus), 
+  select:hover:not(:disabled):not(:focus) {
+    @apply border-primary-400;
   }
 
-  .text-primary {
-    @apply text-primary-600;
+  /* Disabled state for all inputs */
+  input:disabled,
+  textarea:disabled,
+  select:disabled {
+    @apply bg-light-200 border-light-300 text-light-500 cursor-not-allowed;
   }
 }
 
-/* Dark mode styles */
-.dark {
-  @apply bg-dark-900 text-light-100;
+/* Dark mode input styles */
+.dark input[type="checkbox"],
+.dark input[type="radio"] {
+  background-color: #1e293b;
+  border-color: #475569;
+}
 
-  .card {
-    @apply bg-dark-800 border border-dark-700;
+.dark input:disabled,
+.dark textarea:disabled,
+.dark select:disabled {
+  background-color: #0f172a;
+  border-color: #334155;
+  color: #64748b;
+}/* Sel
+ect dropdown styling */
+@layer components {
+  select {
+    @apply appearance-none bg-no-repeat;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
   }
 
-  .modal {
-    @apply bg-dark-800 border border-dark-700;
+  /* Custom placeholder color */
+  ::placeholder {
+    @apply text-light-500;
   }
+}
 
-  .modal-header, .modal-footer {
-    @apply border-dark-700;
-  }
+/* Dark mode select and placeholder */
+.dark select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+}
 
-  .form-input {
-    @apply bg-dark-700 border-dark-600 text-light-100;
-  }
-
-  .btn-secondary {
-    @apply bg-dark-600 hover:bg-dark-700;
-  }
+.dark ::placeholder {
+  color: #64748b;
 }

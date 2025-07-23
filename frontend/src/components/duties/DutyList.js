@@ -201,7 +201,7 @@ const DutyList = () => {
                   <td>{duty.is_group_duty === 1 ? 'Group' : 'Individual'}</td>
                   <td>
                     <button
-                      className="btn btn-primary btn-sm"
+                      className="btn btn-primary btn-sm  mr-2"
                       onClick={() => openEditForm(duty)}
                     >
                       Edit

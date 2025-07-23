@@ -2,8 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './tailwind.css';
-import './tailwind-components.css';
 
 // Components
 import Navbar from './components/layout/Navbar';
@@ -14,6 +12,7 @@ import DutyList from './components/duties/DutyList';
 import AdminPanel from './components/admin/AdminPanel';
 import Settings from './components/admin/Settings';
 
+
 // Theme
 import { ThemeProvider } from './components/theme/ThemeProvider';
 
@@ -23,7 +22,7 @@ function App() {
       <Router>
         <div className="app min-h-screen transition-colors duration-200">
           <Navbar />
-          <main className="container">
+          <main className="container pt-6">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/calendar" element={<Calendar />} />

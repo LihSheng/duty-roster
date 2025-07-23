@@ -4,7 +4,7 @@ import ThemeToggle from '../theme/ThemeToggle';
 
 const Navbar = () => {
   return (
-    <nav className="navbar bg-dark-800 text-white p-3 shadow-md">
+    <nav className="navbar bg-dark-800 text-white p-4 shadow-md">
       <h1 className="logo text-xl font-bold">
         <Link to="/">Duty Roster</Link>
       </h1>

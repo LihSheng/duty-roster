@@ -79,8 +79,8 @@ const PeopleList = () => {
   
   return (
     <div>
-      <div className="flex-between mb-3">
-        <h1>People</h1>
+      <div className="flex-between mb-4">
+        <h1 className="mt-2">People</h1>
         <button className="btn btn-primary" onClick={() => setShowForm(true)}>
           Add Person
         </button>
@@ -127,7 +127,7 @@ const PeopleList = () => {
                   <td>{person.phone || '-'}</td>
                   <td>
                     <button
-                      className="btn btn-primary btn-sm"
+                      className="btn btn-primary btn-sm mr-2"
                       onClick={() => openEditForm(person)}
                     >
                       Edit

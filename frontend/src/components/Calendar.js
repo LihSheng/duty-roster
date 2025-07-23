@@ -380,7 +380,7 @@ const Calendar = () => {
                               )}
                             </div>
                             <div className="duty-info">
-                              <small>Assigned to: {assignment.person_name}</small>
+                              <small>{assignment.person_name}</small>
                               {assignment.status === 'completed' && (
                                 <span className="completed-badge" title="Completed">✓</span>
                               )}
