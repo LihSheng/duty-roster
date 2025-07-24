@@ -5,8 +5,90 @@ const reactHooksPlugin = require('eslint-plugin-react-hooks');
 const importPlugin = require('eslint-plugin-import');
 const jsxA11yPlugin = require('eslint-plugin-jsx-a11y');
 
+// Define custom rules
+const customRules = {
+  'prefer-direct-return': {
+    meta: {
+      type: 'suggestion',
+      docs: {
+        description: 'Enforce direct return syntax for simple components',
+        category: 'Stylistic Issues',
+        recommended: false,
+      },
+      fixable: 'code',
+      schema: [],
+    },
+    create: function (context) {
+      return {
+        ArrowFunctionExpression(node) {
+          // Only check arrow functions with block bodies
+          if (node.body.type !== 'BlockStatement') {
+            return;
+          }
+
+          const body = node.body.body;
+          
+          // Check if the function body consists of a single return statement
+          if (body.length === 1 && body[0].type === 'ReturnStatement') {
+            const returnStatement = body[0];
+            
+            // Check if the return statement has a JSX expression
+            if (returnStatement.argument && 
+                (returnStatement.argument.type === 'JSXElement' || 
+                 returnStatement.argument.type === 'JSXFragment')) {
+              
+              context.report({
+                node,
+                message: 'Use direct return syntax for simple components',
+                fix: function (fixer) {
+                  const sourceCode = context.getSourceCode();
+                  const arrowToken = sourceCode.getTokenBefore(node.body);
+                  const blockStart = sourceCode.getTokenAfter(arrowToken);
+                  const blockEnd = sourceCode.getLastToken(node.body);
+                  const returnToken = sourceCode.getFirstToken(returnStatement);
+                  
+                  // Replace "=> { return jsx; }" with "=> (jsx)"
+                  return [
+                    fixer.replaceTextRange([arrowToken.range[1], returnToken.range[1]], ' ('),
+                    fixer.replaceTextRange([returnStatement.argument.range[1], blockEnd.range[1]], ')')
+                  ];
+                }
+              });
+            }
+          }
+        }
+      };
+    }
+  }
+};
+
 module.exports = [
   js.configs.recommended,
+  {
+    ignores: [
+      // Dependencies
+      '**/node_modules/**',
+      
+      // Build outputs
+      '**/frontend/build/**',
+      '**/frontend/dist/**',
+      '**/build/**',
+      '**/dist/**',
+      
+      // Configuration files
+      '**/webpack.config.js',
+      '**/babel.config.js',
+      '**/postcss.config.js',
+      '**/tailwind.config.js',
+      
+      // Database files
+      '**/*.db',
+      
+      // Other
+      '**/.git/**',
+      '**/coverage/**'
+    ],
+  },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
@@ -28,6 +110,8 @@ module.exports = [
       'react-hooks': reactHooksPlugin,
       import: importPlugin,
       'jsx-a11y': jsxA11yPlugin,
+      // Add custom rules
+      custom: { rules: { 'prefer-direct-return': customRules['prefer-direct-return'] } }
     },
     settings: {
       react: {
@@ -52,7 +136,8 @@ module.exports = [
         'error',
         { blankLine: 'always', prev: '*', next: 'return' },
       ],
-      'prefer-direct-return': 'error', // Use direct return syntax for simple components
+      // Custom rules
+      'custom/prefer-direct-return': 'error', // Use direct return syntax for simple components
 
       // React specific rules
       'react/prop-types': 'error',
