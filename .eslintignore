@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build outputs
+frontend/build/
+frontend/dist/
+build/
+dist/
+
+# Configuration files
+webpack.config.js
+babel.config.js
+postcss.config.js
+tailwind.config.js
+
+# Database files
+*.db
+
+# Other
+.git/
+coverage/
