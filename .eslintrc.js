@@ -22,10 +22,7 @@ module.exports = {
     parser: '@babel/eslint-parser',
   },
   plugins: ['react', 'react-hooks', 'import', 'jsx-a11y'],
-  // Load custom rules
-  rules: {
-    'prefer-direct-return': require('./scripts/eslint-rules/prefer-direct-return'),
-  },
+
   settings: {
     react: {
       version: 'detect',
@@ -49,7 +46,6 @@ module.exports = {
       'error',
       { blankLine: 'always', prev: '*', next: 'return' },
     ],
-    'prefer-direct-return': 'error', // Use direct return syntax for simple components
 
     // React specific rules
     'react/prop-types': 'error',

@@ -1,11 +1,11 @@
-import globals from 'globals';
-import js from '@eslint/js';
-import reactPlugin from 'eslint-plugin-react';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import importPlugin from 'eslint-plugin-import';
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+const globals = require('globals');
+const js = require('@eslint/js');
+const reactPlugin = require('eslint-plugin-react');
+const reactHooksPlugin = require('eslint-plugin-react-hooks');
+const importPlugin = require('eslint-plugin-import');
+const jsxA11yPlugin = require('eslint-plugin-jsx-a11y');
 
-export default [
+module.exports = [
   js.configs.recommended,
   {
     files: ['**/*.{js,jsx}'],
@@ -52,6 +52,7 @@ export default [
         'error',
         { blankLine: 'always', prev: '*', next: 'return' },
       ],
+      'prefer-direct-return': 'error', // Use direct return syntax for simple components
 
       // React specific rules
       'react/prop-types': 'error',

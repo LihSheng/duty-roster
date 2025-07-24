@@ -37,14 +37,14 @@ Examples:
 
 ```javascript
 // ✅ Good
-const calculateTotal = (items) => {
+const calculateTotal = items => {
   const sum = items.reduce((total, item) => total + item.price, 0);
 
   return sum * 1.1; // With tax
 };
 
 // ❌ Bad
-const calculateTotal = (items) => {
+const calculateTotal = items => {
   const sum = items.reduce((total, item) => total + item.price, 0);
   return sum * 1.1; // With tax
 };
@@ -79,7 +79,7 @@ const Button = ({ onClick, children }) => {
 
 // ✅ Good - Block syntax when additional logic is needed
 const SubmitButton = ({ isSubmitting, onClick, children }) => {
-  const handleClick = (e) => {
+  const handleClick = e => {
     if (!isSubmitting) {
       onClick(e);
     }
