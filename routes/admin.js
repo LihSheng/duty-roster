@@ -9,15 +9,16 @@ function isLastFridayOfMonth(date) {
   if (date.getDay() !== 5) {
     return false;
   }
-  
+
   // Get the last day of the month
   const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-  
+
   // If this is the last Friday, then there should be no more Fridays in the month
   const daysUntilEndOfMonth = lastDay.getDate() - date.getDate();
-  
+
   // If there are less than 7 days until the end of the month, and it's a Friday,
   // then it's the last Friday of the month
+
   return daysUntilEndOfMonth < 7;
 }
 
@@ -27,13 +28,13 @@ function isSpecificDayOfMonth(date, week, day) {
   if (date.getDay() !== day) {
     return false;
   }
-  
+
   // Calculate which week of the month this is
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const dayOffset = (day - firstDayOfMonth.getDay() + 7) % 7;
   const firstOccurrence = dayOffset + 1;
   const weekNumber = Math.ceil((date.getDate() - firstOccurrence + 1) / 7);
-  
+
   return weekNumber === week;
 }
 
@@ -42,11 +43,11 @@ function isLastDayOfTypeInMonth(date, day) {
   if (date.getDay() !== day) {
     return false;
   }
-  
+
   // Check if there are no more occurrences of this day in the month
   const testDate = new Date(date);
   testDate.setDate(date.getDate() + 7);
-  
+
   return testDate.getMonth() !== date.getMonth();
 }
 
@@ -58,43 +59,43 @@ function isWorkingDay(date, workingDays = [1, 2, 3, 4, 5]) {
 // Helper function to get the last working day before a date
 function getLastWorkingDay(date, workingDays = [1, 2, 3, 4, 5]) {
   const result = new Date(date);
-  
+
   while (!isWorkingDay(result, workingDays)) {
     result.setDate(result.getDate() - 1);
   }
-  
+
   return result;
 }
 
 // Generate assignments for a week
 router.post('/generate-assignments', (req, res) => {
   const { start_date } = req.body;
-  
+
   // Get all active duties and people
   db.all('SELECT * FROM duties WHERE is_active = 1', (err, duties) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
-    
+
     db.all('SELECT * FROM people WHERE is_active = 1', (err, people) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
       }
-      
+
       if (people.length === 0) {
         res.status(400).json({ error: 'No active people found' });
         return;
       }
-      
+
       const startDate = new Date(start_date);
       const endDate = new Date(startDate);
       endDate.setDate(startDate.getDate() + 6);
-      
+
       const startDateStr = startDate.toISOString().split('T')[0];
       const endDateStr = endDate.toISOString().split('T')[0];
-      
+
       // First, check for existing assignments in the date range
       db.all(
         'SELECT duty_id, assigned_date FROM assignments WHERE assigned_date BETWEEN ? AND ?',
@@ -104,17 +105,17 @@ router.post('/generate-assignments', (req, res) => {
             res.status(500).json({ error: err.message });
             return;
           }
-          
+
           // Create a map of existing assignments to avoid duplicates
           const existingMap = {};
-          existingAssignments.forEach(assignment => {
+          existingAssignments.forEach((assignment) => {
             const key = `${assignment.duty_id}-${assignment.assigned_date}`;
             existingMap[key] = true;
           });
-          
+
           const assignments = [];
-          
-          duties.forEach(duty => {
+
+          duties.forEach((duty) => {
             let daysOfWeek = [];
             try {
               // Try to parse the days_of_week as JSON
@@ -126,28 +127,28 @@ router.post('/generate-assignments', (req, res) => {
                 daysOfWeek = duty.days_of_week;
               }
             }
-            
+
             if (duty.frequency === 'daily') {
               // Assign daily duties for 7 days
               for (let i = 0; i < 7; i++) {
                 const assignDate = new Date(startDate);
                 assignDate.setDate(startDate.getDate() + i);
                 const dateStr = assignDate.toISOString().split('T')[0];
-                
+
                 // Check if this duty is already assigned for this date
                 const key = `${duty.id}-${dateStr}`;
                 if (existingMap[key]) {
                   continue; // Skip if already exists
                 }
-                
+
                 // For group duties, assign to all people
                 if (duty.is_group_duty === 1) {
-                  people.forEach(person => {
+                  people.forEach((person) => {
                     assignments.push({
                       duty_id: duty.id,
                       person_id: person.id,
                       assigned_date: dateStr,
-                      due_date: dateStr
+                      due_date: dateStr,
                     });
                   });
                 } else {
@@ -157,35 +158,35 @@ router.post('/generate-assignments', (req, res) => {
                     duty_id: duty.id,
                     person_id: people[personIndex].id,
                     assigned_date: dateStr,
-                    due_date: dateStr
+                    due_date: dateStr,
                   });
                 }
               }
             } else if (duty.frequency === 'working_days') {
               // Assign duties only on working days
               const workingDays = daysOfWeek.length > 0 ? daysOfWeek : [1, 2, 3, 4, 5]; // Default to Mon-Fri
-              
+
               for (let i = 0; i < 7; i++) {
                 const assignDate = new Date(startDate);
                 assignDate.setDate(startDate.getDate() + i);
                 const dayOfWeek = assignDate.getDay();
                 const dateStr = assignDate.toISOString().split('T')[0];
-                
+
                 if (workingDays.includes(dayOfWeek)) {
                   // Check if this duty is already assigned for this date
                   const key = `${duty.id}-${dateStr}`;
                   if (existingMap[key]) {
                     continue; // Skip if already exists
                   }
-                  
+
                   // For group duties, assign to all people
                   if (duty.is_group_duty === 1) {
-                    people.forEach(person => {
+                    people.forEach((person) => {
                       assignments.push({
                         duty_id: duty.id,
                         person_id: person.id,
                         assigned_date: dateStr,
-                        due_date: dateStr
+                        due_date: dateStr,
                       });
                     });
                   } else {
@@ -195,7 +196,7 @@ router.post('/generate-assignments', (req, res) => {
                       duty_id: duty.id,
                       person_id: people[personIndex].id,
                       assigned_date: dateStr,
-                      due_date: dateStr
+                      due_date: dateStr,
                     });
                   }
                 }
@@ -208,22 +209,22 @@ router.post('/generate-assignments', (req, res) => {
                 assignDate.setDate(startDate.getDate() + i);
                 const dayOfWeek = assignDate.getDay();
                 const dateStr = assignDate.toISOString().split('T')[0];
-                
+
                 if (daysOfWeek.includes(dayOfWeek)) {
                   // Check if this duty is already assigned for this date
                   const key = `${duty.id}-${dateStr}`;
                   if (existingMap[key]) {
                     continue; // Skip if already exists
                   }
-                  
+
                   // For group duties, assign to all people
                   if (duty.is_group_duty === 1) {
-                    people.forEach(person => {
+                    people.forEach((person) => {
                       assignments.push({
                         duty_id: duty.id,
                         person_id: person.id,
                         assigned_date: dateStr,
-                        due_date: dateStr
+                        due_date: dateStr,
                       });
                     });
                   } else {
@@ -232,7 +233,7 @@ router.post('/generate-assignments', (req, res) => {
                       duty_id: duty.id,
                       person_id: people[personIndex % people.length].id,
                       assigned_date: dateStr,
-                      due_date: dateStr
+                      due_date: dateStr,
                     });
                     personIndex++;
                   }
@@ -245,11 +246,11 @@ router.post('/generate-assignments', (req, res) => {
                 currentDate.setDate(startDate.getDate() + i);
                 let assignDate = currentDate;
                 let shouldAssign = false;
-                
+
                 // Check if daysOfWeek is an array with at least 2 elements
                 if (Array.isArray(daysOfWeek) && daysOfWeek.length >= 2) {
                   const [week, day] = daysOfWeek;
-                  
+
                   if (week === -1) {
                     // Last occurrence of the day in the month
                     shouldAssign = isLastDayOfTypeInMonth(currentDate, day);
@@ -257,7 +258,7 @@ router.post('/generate-assignments', (req, res) => {
                     // Specific week and day
                     shouldAssign = isSpecificDayOfMonth(currentDate, week, day);
                   }
-                  
+
                   // If the day falls on a non-working day, use the last working day
                   if (shouldAssign && !isWorkingDay(currentDate)) {
                     assignDate = getLastWorkingDay(currentDate);
@@ -270,57 +271,67 @@ router.post('/generate-assignments', (req, res) => {
                   // Legacy support for House keeping duty
                   shouldAssign = isLastFridayOfMonth(currentDate);
                 }
-                
+
                 if (shouldAssign) {
                   const dateStr = assignDate.toISOString().split('T')[0];
-                  
+
                   // Check if this duty is already assigned for this date
                   const key = `${duty.id}-${dateStr}`;
                   if (existingMap[key]) {
                     continue; // Skip if already exists
                   }
-                  
+
                   // For group duties or House keeping, assign to all people
                   if (duty.is_group_duty === 1 || duty.name === 'House keeping') {
-                    people.forEach(person => {
+                    people.forEach((person) => {
                       assignments.push({
                         duty_id: duty.id,
                         person_id: person.id,
                         assigned_date: dateStr,
-                        due_date: dateStr
+                        due_date: dateStr,
                       });
                     });
                   } else {
                     // For other monthly duties, rotate among people
                     const monthIndex = currentDate.getMonth();
                     const personIndex = monthIndex % people.length;
-                    
+
                     assignments.push({
                       duty_id: duty.id,
                       person_id: people[personIndex].id,
                       assigned_date: dateStr,
-                      due_date: dateStr
+                      due_date: dateStr,
                     });
                   }
                 }
               }
             }
           });
-          
+
           if (assignments.length === 0) {
             res.json({ message: 'No new assignments needed', count: 0 });
             return;
           }
-          
+
           // Insert new assignments
-          const stmt = db.prepare('INSERT INTO assignments (duty_id, person_id, assigned_date, due_date) VALUES (?, ?, ?, ?)');
-          
-          assignments.forEach(assignment => {
-            stmt.run([assignment.duty_id, assignment.person_id, assignment.assigned_date, assignment.due_date]);
+          const stmt = db.prepare(
+            'INSERT INTO assignments (duty_id, person_id, assigned_date, due_date) VALUES (?, ?, ?, ?)'
+          );
+
+          assignments.forEach((assignment) => {
+            stmt.run([
+              assignment.duty_id,
+              assignment.person_id,
+              assignment.assigned_date,
+              assignment.due_date,
+            ]);
           });
-          
+
           stmt.finalize();
-          res.json({ message: `Generated ${assignments.length} assignments`, count: assignments.length });
+          res.json({
+            message: `Generated ${assignments.length} assignments`,
+            count: assignments.length,
+          });
         }
       );
     });
@@ -337,7 +348,7 @@ router.get('/overdue', (req, res) => {
     WHERE a.status = 'pending' AND a.due_date < date('now')
     ORDER BY a.due_date
   `;
-  
+
   db.all(query, (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -354,25 +365,25 @@ router.get('/settings', (req, res) => {
       res.status(500).json({ error: err.message });
       return;
     }
-    
+
     const settings = {};
-    rows.forEach(row => {
+    rows.forEach((row) => {
       settings[row.key] = row.value;
     });
-    
+
     res.json(settings);
   });
 });
 
 router.post('/settings', (req, res) => {
   const settings = req.body;
-  
+
   const stmt = db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
-  
+
   Object.entries(settings).forEach(([key, value]) => {
     stmt.run([key, JSON.stringify(value)]);
   });
-  
+
   stmt.finalize();
   res.json({ message: 'Settings updated successfully' });
 });
@@ -380,23 +391,23 @@ router.post('/settings', (req, res) => {
 // Reset assignments for a date range
 router.delete('/reset-assignments', (req, res) => {
   const { start_date, end_date } = req.query;
-  
+
   if (!start_date || !end_date) {
     res.status(400).json({ error: 'Start date and end date are required' });
     return;
   }
-  
+
   db.run(
     'DELETE FROM assignments WHERE assigned_date BETWEEN ? AND ?',
     [start_date, end_date],
-    function(err) {
+    function (err) {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
       }
-      res.json({ 
-        message: 'Assignments reset successfully', 
-        count: this.changes 
+      res.json({
+        message: 'Assignments reset successfully',
+        count: this.changes,
       });
     }
   );

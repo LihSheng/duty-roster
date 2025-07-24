@@ -5,6 +5,7 @@ import BaseModal from '../BaseModal';
 // Mock createPortal to make it work with testing-library
 jest.mock('react-dom', () => {
   const original = jest.requireActual('react-dom');
+
   return {
     ...original,
     createPortal: (node) => node,
@@ -13,7 +14,7 @@ jest.mock('react-dom', () => {
 
 describe('BaseModal', () => {
   const mockOnClose = jest.fn();
-  
+
   beforeEach(() => {
     mockOnClose.mockClear();
     // Create a div where the portal would normally be rendered
@@ -21,7 +22,7 @@ describe('BaseModal', () => {
     portalRoot.setAttribute('id', 'portal-root');
     document.body.appendChild(portalRoot);
   });
-  
+
   afterEach(() => {
     const portalRoot = document.getElementById('portal-root');
     if (portalRoot) {
@@ -35,7 +36,7 @@ describe('BaseModal', () => {
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     expect(screen.getByText('Modal Content')).toBeInTheDocument();
     expect(screen.getByTestId('modal-overlay')).toBeInTheDocument();
   });
@@ -46,7 +47,7 @@ describe('BaseModal', () => {
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     expect(screen.queryByText('Modal Content')).not.toBeInTheDocument();
     expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument();
   });
@@ -57,7 +58,7 @@ describe('BaseModal', () => {
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
@@ -68,7 +69,7 @@ describe('BaseModal', () => {
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(mockOnClose).not.toHaveBeenCalled();
   });
@@ -79,7 +80,7 @@ describe('BaseModal', () => {
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     fireEvent.click(screen.getByTestId('modal-overlay'));
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
@@ -90,7 +91,7 @@ describe('BaseModal', () => {
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     fireEvent.click(screen.getByText('Modal Content'));
     expect(mockOnClose).not.toHaveBeenCalled();
   });
@@ -101,7 +102,7 @@ describe('BaseModal', () => {
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     fireEvent.click(screen.getByTestId('modal-overlay'));
     expect(mockOnClose).not.toHaveBeenCalled();
   });
@@ -112,38 +113,38 @@ describe('BaseModal', () => {
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     expect(screen.getByTestId('modal-container')).toHaveClass('max-w-md');
-    
+
     rerender(
       <BaseModal isOpen={true} onClose={mockOnClose} size="medium">
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     expect(screen.getByTestId('modal-container')).toHaveClass('max-w-lg');
-    
+
     rerender(
       <BaseModal isOpen={true} onClose={mockOnClose} size="large">
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     expect(screen.getByTestId('modal-container')).toHaveClass('max-w-2xl');
   });
 
   test('applies custom className and overlayClassName', () => {
     render(
-      <BaseModal 
-        isOpen={true} 
-        onClose={mockOnClose} 
-        className="custom-modal-class" 
+      <BaseModal
+        isOpen={true}
+        onClose={mockOnClose}
+        className="custom-modal-class"
         overlayClassName="custom-overlay-class"
       >
         <div>Modal Content</div>
       </BaseModal>
     );
-    
+
     expect(screen.getByTestId('modal-container')).toHaveClass('custom-modal-class');
     expect(screen.getByTestId('modal-overlay')).toHaveClass('custom-overlay-class');
   });

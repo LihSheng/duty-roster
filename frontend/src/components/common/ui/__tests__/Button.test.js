@@ -51,7 +51,7 @@ describe('Button', () => {
     const button = screen.getByText('Loading');
     expect(button).toBeDisabled();
     expect(button).toHaveClass('opacity-50 cursor-not-allowed');
-    
+
     const loadingIndicator = document.querySelector('.animate-spin');
     expect(loadingIndicator).toBeInTheDocument();
   });
@@ -65,14 +65,22 @@ describe('Button', () => {
 
   test('does not call onClick when disabled', () => {
     const handleClick = jest.fn();
-    render(<Button onClick={handleClick} disabled>Click me</Button>);
+    render(
+      <Button onClick={handleClick} disabled>
+        Click me
+      </Button>
+    );
     fireEvent.click(screen.getByText('Click me'));
     expect(handleClick).not.toHaveBeenCalled();
   });
 
   test('does not call onClick when loading', () => {
     const handleClick = jest.fn();
-    render(<Button onClick={handleClick} isLoading>Click me</Button>);
+    render(
+      <Button onClick={handleClick} isLoading>
+        Click me
+      </Button>
+    );
     fireEvent.click(screen.getByText('Click me'));
     expect(handleClick).not.toHaveBeenCalled();
   });

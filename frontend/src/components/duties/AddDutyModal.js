@@ -15,7 +15,7 @@ import Checkbox from '../common/ui/Checkbox';
 
 /**
  * AddDutyModal component for adding new duties or assigning existing duties
- * 
+ *
  * @param {Object} props - Component props
  * @param {string} props.date - The date to assign the duty to
  * @param {Function} props.onClose - Function to call when the modal is closed
@@ -23,12 +23,7 @@ import Checkbox from '../common/ui/Checkbox';
  * @param {boolean} props.isOpen - Whether the modal is open
  * @returns {JSX.Element} - Rendered component
  */
-const AddDutyModal = ({ 
-  date, 
-  onClose, 
-  onDutyAdded,
-  isOpen = true
-}) => {
+const AddDutyModal = ({ date, onClose, onDutyAdded, isOpen = true }) => {
   const [mode, setMode] = useState('existing'); // 'existing' or 'new'
   const [duties, setDuties] = useState([]);
   const [people, setPeople] = useState([]);
@@ -61,6 +56,7 @@ const AddDutyModal = ({
 
     // If there are less than 7 days until the end of the month, and it's a Friday,
     // then it's the last Friday of the month
+
     return daysUntilEndOfMonth < 7;
   };
 
@@ -122,13 +118,9 @@ const AddDutyModal = ({
 
     try {
       // First check if this duty is already assigned for this date
-      const checkRes = await axios.get(
-        `/api/assignments?start_date=${date}&end_date=${date}`
-      );
+      const checkRes = await axios.get(`/api/assignments?start_date=${date}&end_date=${date}`);
       const existingAssignment = checkRes.data.find(
-        (a) =>
-          a.duty_id === parseInt(selectedDuty) &&
-          a.assigned_date === date
+        (a) => a.duty_id === parseInt(selectedDuty) && a.assigned_date === date
       );
 
       if (existingAssignment && !isGroupDuty) {
@@ -141,29 +133,29 @@ const AddDutyModal = ({
       if (isGroupDuty) {
         // For group duties, create an assignment for each selected person
         const peopleToAssign = selectedPeople.length > 0 ? selectedPeople : [selectedPerson];
-        
+
         for (const personId of peopleToAssign) {
           // Skip if this person already has this duty assigned for this date
           const alreadyAssigned = checkRes.data.find(
-            (a) => 
-              a.duty_id === parseInt(selectedDuty) && 
+            (a) =>
+              a.duty_id === parseInt(selectedDuty) &&
               a.person_id === parseInt(personId) &&
               a.assigned_date === date
           );
-          
+
           if (alreadyAssigned) {
             continue;
           }
-          
+
           const res = await axios.post('/api/assignments', {
             duty_id: parseInt(selectedDuty),
             person_id: parseInt(personId),
             assigned_date: date,
             due_date: date,
           });
-          
+
           const person = people.find((p) => p.id === parseInt(personId));
-          
+
           newAssignments.push({
             id: res.data.id,
             duty_id: parseInt(selectedDuty),
@@ -176,7 +168,7 @@ const AddDutyModal = ({
             status: 'pending',
           });
         }
-        
+
         if (newAssignments.length === 0) {
           toast.warning('All selected people already have this duty assigned for this date');
           return;
@@ -192,26 +184,30 @@ const AddDutyModal = ({
 
         const person = people.find((p) => p.id === parseInt(selectedPerson));
 
-        newAssignments = [{
-          id: res.data.id,
-          duty_id: parseInt(selectedDuty),
-          person_id: parseInt(selectedPerson),
-          duty_name: duty.name,
-          person_name: person.name,
-          description: duty.description,
-          assigned_date: date,
-          due_date: date,
-          status: 'pending',
-        }];
+        newAssignments = [
+          {
+            id: res.data.id,
+            duty_id: parseInt(selectedDuty),
+            person_id: parseInt(selectedPerson),
+            duty_name: duty.name,
+            person_name: person.name,
+            description: duty.description,
+            assigned_date: date,
+            due_date: date,
+            status: 'pending',
+          },
+        ];
       }
 
-      toast.success(`Duty assigned successfully to ${newAssignments.length} ${newAssignments.length === 1 ? 'person' : 'people'}`);
-      
+      toast.success(
+        `Duty assigned successfully to ${newAssignments.length} ${newAssignments.length === 1 ? 'person' : 'people'}`
+      );
+
       // Notify parent component about all new assignments
-      newAssignments.forEach(assignment => {
+      newAssignments.forEach((assignment) => {
         onDutyAdded(assignment);
       });
-      
+
       onClose();
     } catch (error) {
       console.error('Error assigning duty:', error);
@@ -239,9 +235,7 @@ const AddDutyModal = ({
 
     try {
       // Check if a duty with this name already exists
-      const existingDuty = duties.find(
-        (d) => d.name.toLowerCase() === newDuty.name.toLowerCase()
-      );
+      const existingDuty = duties.find((d) => d.name.toLowerCase() === newDuty.name.toLowerCase());
 
       let dutyId;
 
@@ -251,19 +245,15 @@ const AddDutyModal = ({
         toast.info('Using existing duty with the same name');
 
         // Check if this duty is already assigned for this date
-        const checkRes = await axios.get(
-          `/api/assignments?start_date=${date}&end_date=${date}`
-        );
-        
+        const checkRes = await axios.get(`/api/assignments?start_date=${date}&end_date=${date}`);
+
         if (!isGroupDuty) {
           const existingAssignment = checkRes.data.find(
             (a) => a.duty_id === dutyId && a.assigned_date === date
           );
 
           if (existingAssignment) {
-            toast.warning(
-              'This duty is already assigned for this date'
-            );
+            toast.warning('This duty is already assigned for this date');
             return;
           }
         }
@@ -274,41 +264,37 @@ const AddDutyModal = ({
           description: newDuty.description,
           frequency: newDuty.frequency,
           days_of_week: newDuty.days_of_week || [],
-          is_group_duty: isGroupDuty
+          is_group_duty: isGroupDuty,
         });
         dutyId = dutyRes.data.id;
       }
 
       let newAssignments = [];
-      
+
       if (isGroupDuty) {
         // For group duties, create an assignment for each selected person
-        const checkRes = await axios.get(
-          `/api/assignments?start_date=${date}&end_date=${date}`
-        );
-        
+        const checkRes = await axios.get(`/api/assignments?start_date=${date}&end_date=${date}`);
+
         for (const personId of selectedPeople) {
           // Skip if this person already has this duty assigned for this date
           const alreadyAssigned = checkRes.data.find(
-            (a) => 
-              a.duty_id === dutyId && 
-              a.person_id === parseInt(personId) &&
-              a.assigned_date === date
+            (a) =>
+              a.duty_id === dutyId && a.person_id === parseInt(personId) && a.assigned_date === date
           );
-          
+
           if (alreadyAssigned) {
             continue;
           }
-          
+
           const res = await axios.post('/api/assignments', {
             duty_id: dutyId,
             person_id: parseInt(personId),
             assigned_date: date,
             due_date: date,
           });
-          
+
           const person = people.find((p) => p.id === parseInt(personId));
-          
+
           newAssignments.push({
             id: res.data.id,
             duty_id: dutyId,
@@ -321,7 +307,7 @@ const AddDutyModal = ({
             status: 'pending',
           });
         }
-        
+
         if (newAssignments.length === 0) {
           toast.warning('All selected people already have this duty assigned for this date');
           return;
@@ -335,30 +321,32 @@ const AddDutyModal = ({
           due_date: date,
         });
 
-        const person = people.find(
-          (p) => p.id === parseInt(selectedPerson)
-        );
+        const person = people.find((p) => p.id === parseInt(selectedPerson));
 
-        newAssignments = [{
-          id: assignmentRes.data.id,
-          duty_id: dutyId,
-          person_id: parseInt(selectedPerson),
-          duty_name: newDuty.name,
-          person_name: person.name,
-          description: newDuty.description,
-          assigned_date: date,
-          due_date: date,
-          status: 'pending',
-        }];
+        newAssignments = [
+          {
+            id: assignmentRes.data.id,
+            duty_id: dutyId,
+            person_id: parseInt(selectedPerson),
+            duty_name: newDuty.name,
+            person_name: person.name,
+            description: newDuty.description,
+            assigned_date: date,
+            due_date: date,
+            status: 'pending',
+          },
+        ];
       }
 
-      toast.success(`Duty assigned successfully to ${newAssignments.length} ${newAssignments.length === 1 ? 'person' : 'people'}`);
-      
+      toast.success(
+        `Duty assigned successfully to ${newAssignments.length} ${newAssignments.length === 1 ? 'person' : 'people'}`
+      );
+
       // Notify parent component about all new assignments
-      newAssignments.forEach(assignment => {
+      newAssignments.forEach((assignment) => {
         onDutyAdded(assignment);
       });
-      
+
       onClose();
     } catch (error) {
       console.error('Error creating duty:', error);
@@ -373,15 +361,15 @@ const AddDutyModal = ({
       [name]: value,
     });
   };
-  
+
   const handleGroupDutyChange = (e) => {
     const isGroup = e.target.checked;
     setIsGroupDuty(isGroup);
     setNewDuty({
       ...newDuty,
-      is_group_duty: isGroup
+      is_group_duty: isGroup,
     });
-    
+
     // Reset selections when switching between individual and group duty
     if (isGroup) {
       setSelectedPeople(selectedPerson ? [selectedPerson] : []);
@@ -389,21 +377,21 @@ const AddDutyModal = ({
       setSelectedPerson(selectedPeople.length > 0 ? selectedPeople[0] : '');
     }
   };
-  
+
   const handlePersonSelection = (e) => {
     setSelectedPerson(e.target.value);
   };
-  
+
   const handleMultiplePersonSelection = (e) => {
     const options = e.target.options;
     const selectedValues = [];
-    
+
     for (let i = 0; i < options.length; i++) {
       if (options[i].selected) {
         selectedValues.push(options[i].value);
       }
     }
-    
+
     setSelectedPeople(selectedValues);
   };
 
@@ -416,26 +404,20 @@ const AddDutyModal = ({
   };
 
   // Convert duties array to options format for Select component
-  const dutyOptions = duties.map(duty => ({
+  const dutyOptions = duties.map((duty) => ({
     value: duty.id.toString(),
-    label: `${duty.name} ${duty.is_group_duty === 1 ? '(Group)' : ''}`
+    label: `${duty.name} ${duty.is_group_duty === 1 ? '(Group)' : ''}`,
   }));
 
   // Convert people array to options format for Select component
-  const peopleOptions = people.map(person => ({
+  const peopleOptions = people.map((person) => ({
     value: person.id.toString(),
-    label: person.name
+    label: person.name,
   }));
 
   return (
-    <BaseModal
-      isOpen={isOpen}
-      onClose={onClose}
-      size="medium"
-    >
-      <ModalHeader onClose={onClose}>
-        Add Duty for {date}
-      </ModalHeader>
+    <BaseModal isOpen={isOpen} onClose={onClose} size="medium">
+      <ModalHeader onClose={onClose}>Add Duty for {date}</ModalHeader>
       <ModalBody>
         {loading ? (
           <div className="text-center py-4">
@@ -464,7 +446,10 @@ const AddDutyModal = ({
             {mode === 'existing' ? (
               <form onSubmit={handleAddExistingDuty} id="existing-duty-form">
                 <div className="mb-4">
-                  <label htmlFor="duty" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+                  <label
+                    htmlFor="duty"
+                    className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+                  >
                     Select Duty
                   </label>
                   <Select
@@ -474,9 +459,9 @@ const AddDutyModal = ({
                     onChange={(e) => {
                       const dutyId = e.target.value;
                       setSelectedDuty(dutyId);
-                      
+
                       // Check if this is a group duty
-                      const duty = duties.find(d => d.id === parseInt(dutyId));
+                      const duty = duties.find((d) => d.id === parseInt(dutyId));
                       setIsGroupDuty(duty && duty.is_group_duty === 1);
                     }}
                     options={dutyOptions}
@@ -487,7 +472,10 @@ const AddDutyModal = ({
 
                 {isGroupDuty ? (
                   <div className="mb-4">
-                    <label htmlFor="people" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+                    <label
+                      htmlFor="people"
+                      className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+                    >
                       Assign To (hold Ctrl/Cmd to select multiple)
                     </label>
                     <select
@@ -505,12 +493,16 @@ const AddDutyModal = ({
                       ))}
                     </select>
                     <p className="mt-1 text-sm text-light-500 dark:text-light-400">
-                      Selected: {selectedPeople.length} {selectedPeople.length === 1 ? 'person' : 'people'}
+                      Selected: {selectedPeople.length}{' '}
+                      {selectedPeople.length === 1 ? 'person' : 'people'}
                     </p>
                   </div>
                 ) : (
                   <div className="mb-4">
-                    <label htmlFor="person" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+                    <label
+                      htmlFor="person"
+                      className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+                    >
                       Assign To
                     </label>
                     <Select
@@ -528,7 +520,10 @@ const AddDutyModal = ({
             ) : (
               <form onSubmit={handleCreateNewDuty} id="new-duty-form">
                 <div className="mb-4">
-                  <label htmlFor="name" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+                  >
                     Duty Name
                   </label>
                   <TextInput
@@ -541,7 +536,10 @@ const AddDutyModal = ({
                 </div>
 
                 <div className="mb-4">
-                  <label htmlFor="description" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+                  <label
+                    htmlFor="description"
+                    className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+                  >
                     Description
                   </label>
                   <TextArea
@@ -558,7 +556,7 @@ const AddDutyModal = ({
                   days={newDuty.days_of_week}
                   onChange={handleFrequencyChange}
                 />
-                
+
                 <div className="mb-4">
                   <Checkbox
                     id="is_group_duty"
@@ -571,7 +569,10 @@ const AddDutyModal = ({
 
                 {isGroupDuty ? (
                   <div className="mb-4">
-                    <label htmlFor="people" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+                    <label
+                      htmlFor="people"
+                      className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+                    >
                       Assign To (hold Ctrl/Cmd to select multiple)
                     </label>
                     <select
@@ -589,12 +590,16 @@ const AddDutyModal = ({
                       ))}
                     </select>
                     <p className="mt-1 text-sm text-light-500 dark:text-light-400">
-                      Selected: {selectedPeople.length} {selectedPeople.length === 1 ? 'person' : 'people'}
+                      Selected: {selectedPeople.length}{' '}
+                      {selectedPeople.length === 1 ? 'person' : 'people'}
                     </p>
                   </div>
                 ) : (
                   <div className="mb-4">
-                    <label htmlFor="person" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+                    <label
+                      htmlFor="person"
+                      className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+                    >
                       Assign To
                     </label>
                     <Select
@@ -614,10 +619,7 @@ const AddDutyModal = ({
         )}
       </ModalBody>
       <ModalFooter>
-        <Button
-          variant="secondary"
-          onClick={onClose}
-        >
+        <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>
         <Button
@@ -637,7 +639,7 @@ AddDutyModal.propTypes = {
   date: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   onDutyAdded: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool
+  isOpen: PropTypes.bool,
 };
 
 export default AddDutyModal;

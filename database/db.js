@@ -51,7 +51,7 @@ db.serialize(() => {
   )`);
 
   // No default duties will be created - users will add their own duties
-  console.log("Database initialized without default duties");
+  console.log('Database initialized without default duties');
 });
 
 module.exports = db;

@@ -4,7 +4,7 @@ import LoadingIndicator from './LoadingIndicator';
 
 /**
  * Button component with support for variants, sizes, disabled and loading states
- * 
+ *
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Button content
  * @param {Function} props.onClick - Click handler function
@@ -37,17 +37,19 @@ const Button = ({
   // Variant classes
   const variantClasses = {
     primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
-    secondary: 'bg-light-200 text-dark-800 hover:bg-light-300 focus:ring-light-400 dark:bg-dark-600 dark:text-light-100 dark:hover:bg-dark-700 dark:focus:ring-dark-500',
+    secondary:
+      'bg-light-200 text-dark-800 hover:bg-light-300 focus:ring-light-400 dark:bg-dark-600 dark:text-light-100 dark:hover:bg-dark-700 dark:focus:ring-dark-500',
     danger: 'bg-danger-600 text-white hover:bg-danger-700 focus:ring-danger-500',
     success: 'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500',
   };
 
   // Base classes that apply to all buttons
-  const baseClasses = 'inline-flex items-center justify-center font-medium rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-  
+  const baseClasses =
+    'inline-flex items-center justify-center font-medium rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
+
   // State classes
-  const stateClasses = (disabled || isLoading) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
-  
+  const stateClasses = disabled || isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
+
   // Combine all classes
   const buttonClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${stateClasses} ${className}`;
 

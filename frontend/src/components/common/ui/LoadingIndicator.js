@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 /**
  * LoadingIndicator component for displaying loading states
- * 
+ *
  * @param {Object} props - Component props
  * @param {string} props.size - Size of the loading indicator (small, medium, large)
  * @param {string} props.text - Optional text to display alongside the indicator
@@ -11,12 +11,7 @@ import PropTypes from 'prop-types';
  * @param {string} props.className - Additional CSS classes
  * @returns {JSX.Element} - Rendered component
  */
-const LoadingIndicator = ({
-  size = 'medium',
-  text = '',
-  centered = false,
-  className = '',
-}) => {
+const LoadingIndicator = ({ size = 'medium', text = '', centered = false, className = '' }) => {
   // Size classes for the spinner
   const sizeClasses = {
     small: 'w-4 h-4 border-2',
@@ -36,12 +31,10 @@ const LoadingIndicator = ({
 
   return (
     <div className={containerClasses}>
-      <div className={`animate-spin rounded-full border-t-transparent border-primary-600 ${sizeClasses[size]}`} />
-      {text && (
-        <span className={`ml-2 ${textSizeClasses[size]}`}>
-          {text}
-        </span>
-      )}
+      <div
+        className={`animate-spin rounded-full border-t-transparent border-primary-600 ${sizeClasses[size]}`}
+      />
+      {text && <span className={`ml-2 ${textSizeClasses[size]}`}>{text}</span>}
     </div>
   );
 };

@@ -6,67 +6,73 @@ A modern web application for managing cleaning duties and routine tasks in house
 
 ## Features
 
--   **Duty Management**: Create and manage different types of duties with flexible frequency options
-    -   Daily duties
-    -   Weekly duties (specific days of the week)
-    -   Monthly duties (specific day of month, e.g., last Friday)
-    -   Custom frequency options
-    -   User-defined duties (no default duties required)
-    -   Group duties that can be assigned to multiple people simultaneously
--   **People Management**: Add team members with contact information
--   **Calendar View**: Drag-and-drop interface for duty assignments
--   **Notifications**: Email and WhatsApp notifications for duty assignments and reminders
--   **Admin Controls**: Generate weekly assignments and manage settings
--   **Completion Tracking**: Mark duties as completed and track overdue tasks
--   **Automated Deployment**: GitHub workflow for automatic deployment to Google Cloud
--   **Frequency Customization**: Flexible duty scheduling with custom recurrence patterns
--   **Duty Assignment**: Assign duties to specific people for specific dates
--   **Duplicate Prevention**: System prevents duplicate duty assignments for the same date
+- **Duty Management**: Create and manage different types of duties with flexible frequency options
+  - Daily duties
+  - Weekly duties (specific days of the week)
+  - Monthly duties (specific day of month, e.g., last Friday)
+  - Custom frequency options
+  - User-defined duties (no default duties required)
+  - Group duties that can be assigned to multiple people simultaneously
+- **People Management**: Add team members with contact information
+- **Calendar View**: Drag-and-drop interface for duty assignments
+- **Notifications**: Email and WhatsApp notifications for duty assignments and reminders
+- **Admin Controls**: Generate weekly assignments and manage settings
+- **Completion Tracking**: Mark duties as completed and track overdue tasks
+- **Automated Deployment**: GitHub workflow for automatic deployment to Google Cloud
+- **Frequency Customization**: Flexible duty scheduling with custom recurrence patterns
+- **Duty Assignment**: Assign duties to specific people for specific dates
+- **Duplicate Prevention**: System prevents duplicate duty assignments for the same date
 
 ## Tech Stack
 
--   **Backend**: Node.js, Express.js
--   **Database**: SQLite (lightweight, file-based database)
--   **Frontend**: React.js with drag-and-drop calendar interface, Tailwind CSS for styling
--   **Notifications**: Nodemailer (Email), WhatsApp API integration
--   **CI/CD**: GitHub Actions workflow for automated deployment to Google Cloud
--   **Scheduling**: Node-cron for automated task scheduling and reminders
+- **Backend**: Node.js, Express.js
+- **Database**: SQLite (lightweight, file-based database)
+- **Frontend**: React.js with drag-and-drop calendar interface, Tailwind CSS for styling
+- **Notifications**: Nodemailer (Email), WhatsApp API integration
+- **CI/CD**: GitHub Actions workflow for automated deployment to Google Cloud
+- **Scheduling**: Node-cron for automated task scheduling and reminders
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm or yarn
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd duty-roster
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm run install-all
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
    ```
 
 4. **Seed the database with demo data** (optional)
+
    ```bash
    npm run seed
    ```
 
 5. **Start the application**
+
    ```bash
    # Development mode (backend + frontend)
    npm run dev
-   
+
    # Or start separately:
    npm start              # Backend (http://localhost:5000)
    cd frontend && npm start  # Frontend (http://localhost:3000)
@@ -123,6 +129,7 @@ JWT_SECRET=your-jwt-secret-here
 ### Getting Started with Demo Data
 
 If you seeded the database, you'll have:
+
 - **6 sample people** (Alice, Bob, Carol, David, Emma, Frank)
 - **8 realistic duties** (Kitchen cleaning, bathroom cleaning, etc.)
 - **49 assignments** spanning past week and next 2 weeks
@@ -166,6 +173,7 @@ If you seeded the database, you'll have:
 ## 🛠️ Development
 
 ### Project Structure
+
 ```
 duty-roster/
 ├── backend/
@@ -184,13 +192,15 @@ duty-roster/
 ```
 
 ### Development Servers
+
 - **Backend API**: http://localhost:5000
 - **Frontend**: http://localhost:3000
 - **Database**: SQLite file at `database/duty_roster.db`
 
 ### API Endpoints
+
 - `GET/POST /api/people` - People management
-- `GET/POST /api/duties` - Duty management  
+- `GET/POST /api/duties` - Duty management
 - `GET/POST /api/assignments` - Assignment management
 - `POST /api/admin/generate-assignments` - Generate weekly assignments
 - `POST /api/notifications/send-reminders` - Send notifications
@@ -233,21 +243,22 @@ EMAIL_FROM=your-email@gmail.com
 
 ## 📜 Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm start` | Start production server |
-| `npm run dev` | Start development server with auto-reload |
-| `npm run client` | Start frontend development server only |
-| `npm run build` | Build frontend for production |
+| Command               | Description                                   |
+| --------------------- | --------------------------------------------- |
+| `npm start`           | Start production server                       |
+| `npm run dev`         | Start development server with auto-reload     |
+| `npm run client`      | Start frontend development server only        |
+| `npm run build`       | Build frontend for production                 |
 | `npm run install-all` | Install all dependencies (backend + frontend) |
-| `npm run seed` | Populate database with demo data |
-| `npm run reset-db` | Reset database to empty state |
+| `npm run seed`        | Populate database with demo data              |
+| `npm run reset-db`    | Reset database to empty state                 |
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
 **Port already in use**
+
 ```bash
 # Kill process on port 3000 or 5000
 npx kill-port 3000
@@ -255,6 +266,7 @@ npx kill-port 5000
 ```
 
 **Database locked**
+
 ```bash
 # Reset database
 npm run reset-db
@@ -262,6 +274,7 @@ npm run seed
 ```
 
 **Build failures**
+
 ```bash
 # Clear node_modules and reinstall
 rm -rf node_modules frontend/node_modules

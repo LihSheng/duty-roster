@@ -22,13 +22,13 @@ const getInitialTheme = () => {
 // Apply theme to document
 const applyTheme = (theme) => {
   const root = window.document.documentElement;
-  
+
   if (theme === 'dark') {
     root.classList.add('dark');
   } else {
     root.classList.remove('dark');
   }
-  
+
   // Save theme preference to localStorage
   localStorage.setItem('color-theme', theme);
 };
@@ -38,6 +38,7 @@ const toggleTheme = () => {
   const currentTheme = localStorage.getItem('color-theme') || getInitialTheme();
   const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
   applyTheme(newTheme);
+
   return newTheme;
 };
 
@@ -45,6 +46,7 @@ const toggleTheme = () => {
 const initializeTheme = () => {
   const theme = getInitialTheme();
   applyTheme(theme);
+
   return theme;
 };
 

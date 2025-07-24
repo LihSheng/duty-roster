@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 
 /**
  * BaseModal component that serves as the foundation for all modal dialogs
- * 
+ *
  * @param {Object} props - Component props
  * @param {boolean} props.isOpen - Whether the modal is open
  * @param {Function} props.onClose - Function to call when the modal is closed
@@ -50,7 +50,12 @@ const BaseModal = ({
   // Handle click outside
   const handleOverlayClick = (event) => {
     // Make sure the click is on the overlay itself, not a child element
-    if (closeOnOutsideClick && modalRef.current && !modalRef.current.contains(event.target) && event.target.classList.contains('modal-overlay')) {
+    if (
+      closeOnOutsideClick &&
+      modalRef.current &&
+      !modalRef.current.contains(event.target) &&
+      event.target.classList.contains('modal-overlay')
+    ) {
       onClose();
     }
   };
@@ -66,15 +71,16 @@ const BaseModal = ({
   if (!isOpen) return null;
 
   // Create a portal to render the modal at the end of the document body
+
   return createPortal(
-    <div 
+    <div
       className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 transition-opacity modal-overlay ${overlayClassName}`}
       onClick={handleOverlayClick}
       aria-modal="true"
       role="dialog"
       data-testid="modal-overlay"
     >
-      <div 
+      <div
         ref={modalRef}
         className={`bg-white dark:bg-dark-800 rounded-lg shadow-xl w-full ${sizeClasses[size]} transform transition-all ${className}`}
         data-testid="modal-container"

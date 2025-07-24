@@ -8,11 +8,11 @@ const PeopleList = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [currentPerson, setCurrentPerson] = useState(null);
-  
+
   useEffect(() => {
     fetchPeople();
   }, []);
-  
+
   const fetchPeople = async () => {
     try {
       const res = await axios.get('/api/people');
@@ -24,7 +24,7 @@ const PeopleList = () => {
       toast.error('Failed to load people');
     }
   };
-  
+
   const addPerson = async (personData) => {
     try {
       const res = await axios.post('/api/people', personData);
@@ -36,11 +36,11 @@ const PeopleList = () => {
       toast.error('Failed to add person');
     }
   };
-  
+
   const updatePerson = async (id, personData) => {
     try {
       await axios.put(`/api/people/${id}`, personData);
-      setPeople(people.map(p => (p.id === id ? { ...p, ...personData } : p)));
+      setPeople(people.map((p) => (p.id === id ? { ...p, ...personData } : p)));
       setShowForm(false);
       setCurrentPerson(null);
       toast.success('Person updated successfully');
@@ -49,12 +49,12 @@ const PeopleList = () => {
       toast.error('Failed to update person');
     }
   };
-  
+
   const deletePerson = async (id) => {
     if (window.confirm('Are you sure you want to remove this person?')) {
       try {
         await axios.delete(`/api/people/${id}`);
-        setPeople(people.filter(p => p.id !== id));
+        setPeople(people.filter((p) => p.id !== id));
         toast.success('Person removed successfully');
       } catch (error) {
         console.error('Error deleting person:', error);
@@ -62,21 +62,21 @@ const PeopleList = () => {
       }
     }
   };
-  
+
   const openEditForm = (person) => {
     setCurrentPerson(person);
     setShowForm(true);
   };
-  
+
   const closeForm = () => {
     setShowForm(false);
     setCurrentPerson(null);
   };
-  
+
   if (loading) {
     return <div className="text-center mt-3">Loading...</div>;
   }
-  
+
   return (
     <div>
       <div className="flex-between mb-4">
@@ -85,7 +85,7 @@ const PeopleList = () => {
           Add Person
         </button>
       </div>
-      
+
       {showForm && (
         <div className="modal-overlay">
           <div className="modal">
@@ -105,7 +105,7 @@ const PeopleList = () => {
           </div>
         </div>
       )}
-      
+
       {people.length === 0 ? (
         <p>No people found. Add someone to get started.</p>
       ) : (
@@ -120,7 +120,7 @@ const PeopleList = () => {
               </tr>
             </thead>
             <tbody>
-              {people.map(person => (
+              {people.map((person) => (
                 <tr key={person.id}>
                   <td>{person.name}</td>
                   <td>{person.email || '-'}</td>

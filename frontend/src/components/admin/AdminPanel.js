@@ -8,7 +8,7 @@ const AdminPanel = () => {
   const [startDate, setStartDate] = useState('');
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-  
+
   useEffect(() => {
     // Set default start date to next Monday
     const today = new Date();
@@ -16,10 +16,10 @@ const AdminPanel = () => {
     const daysUntilMonday = (1 + 7 - today.getDay()) % 7;
     nextMonday.setDate(today.getDate() + (daysUntilMonday || 7));
     setStartDate(nextMonday.toISOString().split('T')[0]);
-    
+
     fetchOverdueDuties();
   }, []);
-  
+
   const fetchOverdueDuties = async () => {
     try {
       const res = await axios.get('/api/admin/overdue');
@@ -31,20 +31,20 @@ const AdminPanel = () => {
       toast.error('Failed to load overdue duties');
     }
   };
-  
+
   const generateAssignments = async () => {
     if (!startDate) {
       toast.error('Please select a start date');
       return;
     }
-    
+
     setGenerating(true);
-    
+
     try {
       const res = await axios.post('/api/admin/generate-assignments', {
-        start_date: startDate
+        start_date: startDate,
       });
-      
+
       toast.success(`Generated ${res.data.count} assignments`);
       setGenerating(false);
     } catch (error) {
@@ -53,7 +53,7 @@ const AdminPanel = () => {
       setGenerating(false);
     }
   };
-  
+
   const sendNotifications = async (assignmentId) => {
     try {
       await axios.post(`/api/notifications/assignment/${assignmentId}`);
@@ -63,7 +63,7 @@ const AdminPanel = () => {
       toast.error('Failed to send notification');
     }
   };
-  
+
   const sendAllOverdueNotifications = async () => {
     try {
       const res = await axios.post('/api/notifications/overdue');
@@ -73,15 +73,15 @@ const AdminPanel = () => {
       toast.error('Failed to send overdue notifications');
     }
   };
-  
+
   if (loading) {
     return <div className="text-center mt-3">Loading...</div>;
   }
-  
+
   return (
     <div>
       <h1 className="mb-3">Admin Panel</h1>
-      
+
       <div className="grid-2">
         <div className="card">
           <div className="card-header">
@@ -97,16 +97,12 @@ const AdminPanel = () => {
                 onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
-            <button
-              className="btn btn-primary"
-              onClick={generateAssignments}
-              disabled={generating}
-            >
+            <button className="btn btn-primary" onClick={generateAssignments} disabled={generating}>
               {generating ? 'Generating...' : 'Generate Assignments'}
             </button>
           </div>
         </div>
-        
+
         <div className="card">
           <div className="card-header">
             <h2>Settings</h2>
@@ -119,20 +115,17 @@ const AdminPanel = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="card mt-3">
         <div className="card-header">
           <h2>Overdue Duties</h2>
           {overdueDuties.length > 0 && (
-            <button
-              className="btn btn-warning"
-              onClick={sendAllOverdueNotifications}
-            >
+            <button className="btn btn-warning" onClick={sendAllOverdueNotifications}>
               Send All Reminders
             </button>
           )}
         </div>
-        
+
         {overdueDuties.length === 0 ? (
           <p className="p-2">No overdue duties found.</p>
         ) : (
@@ -146,7 +139,7 @@ const AdminPanel = () => {
               </tr>
             </thead>
             <tbody>
-              {overdueDuties.map(duty => (
+              {overdueDuties.map((duty) => (
                 <tr key={duty.id}>
                   <td>{duty.duty_name}</td>
                   <td>{duty.person_name}</td>

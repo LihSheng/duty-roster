@@ -8,13 +8,17 @@ const addHouseKeepingDuty = () => {
       console.error('Error checking for House keeping duty:', err);
       return;
     }
-    
+
     if (duty) {
       console.log('House keeping duty already exists, updating frequency...');
       // Update the existing duty to have monthly frequency
       db.run(
         'UPDATE duties SET frequency = ?, description = ? WHERE id = ?',
-        ['monthly', 'Monthly house cleaning on the last Friday of each month. All people are involved.', duty.id],
+        [
+          'monthly',
+          'Monthly house cleaning on the last Friday of each month. All people are involved.',
+          duty.id,
+        ],
         (err) => {
           if (err) {
             console.error('Error updating House keeping duty:', err);
@@ -32,9 +36,9 @@ const addHouseKeepingDuty = () => {
           'House keeping',
           'Monthly house cleaning on the last Friday of each month. All people are involved.',
           'monthly',
-          '[]'
+          '[]',
         ],
-        function(err) {
+        function (err) {
           if (err) {
             console.error('Error creating House keeping duty:', err);
             return;

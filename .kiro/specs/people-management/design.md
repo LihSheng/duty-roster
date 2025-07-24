@@ -5,6 +5,7 @@
 The People Management feature enhances the Duty Roster application by providing comprehensive functionality to manage team members who participate in the duty roster system. This design document outlines the architecture, components, data models, and interfaces required to implement the feature according to the requirements.
 
 The People Management feature will allow administrators to:
+
 - Create and manage detailed profiles for team members
 - Organize people into groups or teams
 - Track availability and schedule preferences
@@ -126,14 +127,14 @@ sequenceDiagram
     participant API as People API
     participant DB as Database
     participant WS as Workload Service
-    
+
     A->>UI: Create/Edit Person
     UI->>API: POST/PUT /api/people
     API->>DB: Insert/Update Person
     DB-->>API: Confirmation
     API-->>UI: Success Response
     UI-->>A: Confirmation
-    
+
     A->>UI: View Person Workload
     UI->>API: GET /api/people/:id/workload
     API->>WS: calculateWorkload(personId)
@@ -219,7 +220,7 @@ erDiagram
     PEOPLE ||--o{ AVAILABILITY : "has"
     PEOPLE ||--o{ ASSIGNMENTS : "assigned to"
     DUTIES ||--o{ ASSIGNMENTS : "has"
-    
+
     PEOPLE {
         int id PK
         string name
@@ -232,7 +233,7 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    
+
     GROUPS {
         int id PK
         string name
@@ -241,14 +242,14 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    
+
     GROUP_MEMBERS {
         int id PK
         int group_id FK
         int person_id FK
         datetime created_at
     }
-    
+
     AVAILABILITY {
         int id PK
         int person_id FK
@@ -261,7 +262,7 @@ erDiagram
         boolean is_available
         datetime created_at
     }
-    
+
     ASSIGNMENTS {
         int id PK
         int duty_id FK
@@ -273,7 +274,7 @@ erDiagram
         string notes
         datetime created_at
     }
-    
+
     DUTIES {
         int id PK
         string name

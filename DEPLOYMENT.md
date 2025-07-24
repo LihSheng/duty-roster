@@ -18,6 +18,7 @@ Render is the easiest platform for deploying this full-stack application.
    - Choose your branch (usually `main` or `master`)
 
 3. **Configure Build Settings**
+
    ```
    Name: duty-roster (or your preferred name)
    Environment: Node
@@ -29,6 +30,7 @@ Render is the easiest platform for deploying this full-stack application.
 
 4. **Set Environment Variables**
    Go to Environment tab and add:
+
    ```
    NODE_ENV=production
    SMTP_HOST=smtp.gmail.com
@@ -51,22 +53,26 @@ Render automatically deploys when you push to your connected branch. No addition
 ## Heroku
 
 ### Prerequisites
+
 - Heroku CLI installed
 - Heroku account
 
 ### Deployment Steps
 
 1. **Login to Heroku**
+
    ```bash
    heroku login
    ```
 
 2. **Create Heroku App**
+
    ```bash
    heroku create your-app-name
    ```
 
 3. **Set Environment Variables**
+
    ```bash
    heroku config:set NODE_ENV=production
    heroku config:set SMTP_HOST=smtp.gmail.com
@@ -98,6 +104,7 @@ Render automatically deploys when you push to your connected branch. No addition
 For frontend-only deployment (you'll need a separate backend):
 
 1. **Install Vercel CLI**
+
    ```bash
    npm i -g vercel
    ```
@@ -158,47 +165,51 @@ docker run -p 5000:5000 \
 
 ### Required for Production
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `NODE_ENV` | Environment mode | `production` |
-| `PORT` | Server port | `5000` (auto-set by most platforms) |
+| Variable   | Description      | Example                             |
+| ---------- | ---------------- | ----------------------------------- |
+| `NODE_ENV` | Environment mode | `production`                        |
+| `PORT`     | Server port      | `5000` (auto-set by most platforms) |
 
 ### Email Notifications (Optional)
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `SMTP_HOST` | Email server host | `smtp.gmail.com` |
-| `SMTP_PORT` | Email server port | `587` |
-| `SMTP_USER` | Email username | `your-email@gmail.com` |
-| `SMTP_PASS` | Email password/app password | `your-app-password` |
-| `EMAIL_FROM` | From email address | `your-email@gmail.com` |
+| Variable     | Description                 | Example                |
+| ------------ | --------------------------- | ---------------------- |
+| `SMTP_HOST`  | Email server host           | `smtp.gmail.com`       |
+| `SMTP_PORT`  | Email server port           | `587`                  |
+| `SMTP_USER`  | Email username              | `your-email@gmail.com` |
+| `SMTP_PASS`  | Email password/app password | `your-app-password`    |
+| `EMAIL_FROM` | From email address          | `your-email@gmail.com` |
 
 ### Optional Settings
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `REMINDER_DAYS` | Days before due date to remind | `1` |
-| `DB_PATH` | Database file path | `./database/duty_roster.db` |
-| `BASE_URL` | Application base URL | Auto-detected |
+| Variable        | Description                    | Default                     |
+| --------------- | ------------------------------ | --------------------------- |
+| `REMINDER_DAYS` | Days before due date to remind | `1`                         |
+| `DB_PATH`       | Database file path             | `./database/duty_roster.db` |
+| `BASE_URL`      | Application base URL           | Auto-detected               |
 
 ## Troubleshooting Deployment
 
 ### Common Issues
 
 **Build Fails - Missing Dependencies**
+
 - Ensure all build dependencies are in `dependencies`, not `devDependencies`
 - Check that `webpack-cli` and `html-webpack-plugin` are included
 
 **Database Issues**
+
 - SQLite database is created automatically
 - Ensure write permissions for database directory
 - Consider using `npm run seed` after first deployment
 
 **Port Binding Issues**
+
 - Use `process.env.PORT` in your server
 - Most platforms set this automatically
 
 **Email Not Working**
+
 - Use Gmail app passwords, not regular passwords
 - Enable 2FA on Gmail account first
 - Check firewall/security settings
@@ -214,6 +225,7 @@ After deployment, verify these endpoints:
 ### Performance Optimization
 
 1. **Enable Gzip Compression**
+
    ```javascript
    // In server.js
    const compression = require('compression');
@@ -221,11 +233,14 @@ After deployment, verify these endpoints:
    ```
 
 2. **Set Cache Headers**
+
    ```javascript
    // For static files
-   app.use(express.static('frontend/build', {
-     maxAge: '1d'
-   }));
+   app.use(
+     express.static('frontend/build', {
+       maxAge: '1d',
+     })
+   );
    ```
 
 3. **Database Optimization**
@@ -237,6 +252,7 @@ After deployment, verify these endpoints:
 ### Basic Monitoring
 
 Most platforms provide:
+
 - Application logs
 - Performance metrics
 - Uptime monitoring
@@ -249,10 +265,10 @@ Add health check endpoint:
 ```javascript
 // In server.js
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
+  res.json({
+    status: 'ok',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
   });
 });
 ```
@@ -264,6 +280,7 @@ app.get('/health', (req, res) => {
 Since SQLite is file-based:
 
 1. **Manual Backup**
+
    ```bash
    # Copy database file
    cp database/duty_roster.db backup/duty_roster_$(date +%Y%m%d).db

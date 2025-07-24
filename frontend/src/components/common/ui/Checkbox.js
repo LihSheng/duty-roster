@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 /**
  * Checkbox component with validation support
- * 
+ *
  * @param {Object} props - Component props
  * @param {string} props.id - Checkbox ID
  * @param {string} props.name - Checkbox name
@@ -34,26 +34,27 @@ const Checkbox = ({
 }) => {
   // Base classes for the container
   const containerClasses = `flex items-center ${className}`;
-  
+
   // Base classes for the checkbox input
-  const baseInputClasses = 'h-4 w-4 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-  
+  const baseInputClasses =
+    'h-4 w-4 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
+
   // Error state classes
   const errorClasses = error
     ? 'border-danger-600 focus:border-danger-600 focus:ring-danger-500'
     : 'border-light-300 focus:border-primary-500 focus:ring-primary-500 dark:border-dark-600';
-  
+
   // Checked state classes
   const checkedClasses = checked
     ? 'bg-primary-600 border-primary-600 dark:bg-primary-500 dark:border-primary-500'
     : 'bg-white dark:bg-dark-800';
-  
+
   // Disabled state classes
   const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
-  
+
   // Combine all input classes
   const inputClasses = `${baseInputClasses} ${errorClasses} ${checkedClasses} ${disabledClasses} ${inputClassName}`;
-  
+
   // Label classes
   const baseLabelClasses = 'ml-2 text-sm';
   const labelDisabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';

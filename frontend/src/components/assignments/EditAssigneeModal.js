@@ -12,7 +12,7 @@ import Button from '../common/ui/Button';
 
 /**
  * EditAssigneeModal component for editing assignment assignees
- * 
+ *
  * @param {Object} props - Component props
  * @param {Object} props.assignment - The assignment to edit
  * @param {Function} props.onClose - Function to call when the modal is closed
@@ -20,12 +20,7 @@ import Button from '../common/ui/Button';
  * @param {boolean} props.isOpen - Whether the modal is open
  * @returns {JSX.Element} - Rendered component
  */
-const EditAssigneeModal = ({ 
-  assignment, 
-  onClose, 
-  onAssigneeUpdated,
-  isOpen = true
-}) => {
+const EditAssigneeModal = ({ assignment, onClose, onAssigneeUpdated, isOpen = true }) => {
   const [people, setPeople] = useState([]);
   const [selectedPerson, setSelectedPerson] = useState('');
   const [loading, setLoading] = useState(true);
@@ -35,14 +30,14 @@ const EditAssigneeModal = ({
       try {
         const res = await axios.get('/api/people');
         setPeople(res.data);
-        
+
         // Set the current assignee as the default selected person
         if (assignment && assignment.person_id) {
           setSelectedPerson(assignment.person_id.toString());
         } else if (res.data.length > 0) {
           setSelectedPerson(res.data[0].id.toString());
         }
-        
+
         setLoading(false);
       } catch (error) {
         console.error('Error fetching people:', error);
@@ -68,17 +63,17 @@ const EditAssigneeModal = ({
       await axios.put(`/api/assignments/${assignment.id}`, {
         person_id: parseInt(selectedPerson),
         assigned_date: assignment.assigned_date,
-        due_date: assignment.due_date
+        due_date: assignment.due_date,
       });
 
       // Find the selected person's name for the UI update
-      const person = people.find(p => p.id === parseInt(selectedPerson));
-      
+      const person = people.find((p) => p.id === parseInt(selectedPerson));
+
       // Create updated assignment object for the parent component
       const updatedAssignment = {
         ...assignment,
         person_id: parseInt(selectedPerson),
-        person_name: person ? person.name : 'Unknown'
+        person_name: person ? person.name : 'Unknown',
       };
 
       toast.success('Assignee updated successfully');
@@ -91,20 +86,14 @@ const EditAssigneeModal = ({
   };
 
   // Convert people array to options format for Select component
-  const peopleOptions = people.map(person => ({
+  const peopleOptions = people.map((person) => ({
     value: person.id.toString(),
-    label: person.name
+    label: person.name,
   }));
 
   return (
-    <BaseModal
-      isOpen={isOpen}
-      onClose={onClose}
-      size="medium"
-    >
-      <ModalHeader onClose={onClose}>
-        Edit Assignee
-      </ModalHeader>
+    <BaseModal isOpen={isOpen} onClose={onClose} size="medium">
+      <ModalHeader onClose={onClose}>Edit Assignee</ModalHeader>
       <ModalBody>
         {loading ? (
           <div className="text-center py-4">
@@ -114,7 +103,10 @@ const EditAssigneeModal = ({
         ) : (
           <form onSubmit={handleSubmit} id="edit-assignee-form">
             <div className="mb-4">
-              <label htmlFor="duty" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+              <label
+                htmlFor="duty"
+                className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+              >
                 Duty
               </label>
               <TextInput
@@ -130,7 +122,10 @@ const EditAssigneeModal = ({
             </div>
 
             <div className="mb-4">
-              <label htmlFor="person" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+              <label
+                htmlFor="person"
+                className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+              >
                 Assign To
               </label>
               <Select
@@ -146,7 +141,10 @@ const EditAssigneeModal = ({
             </div>
 
             <div className="mb-4">
-              <label htmlFor="date" className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1">
+              <label
+                htmlFor="date"
+                className="block text-sm font-medium text-dark-800 dark:text-light-200 mb-1"
+              >
                 Date
               </label>
               <TextInput
@@ -161,10 +159,7 @@ const EditAssigneeModal = ({
         )}
       </ModalBody>
       <ModalFooter>
-        <Button
-          variant="secondary"
-          onClick={onClose}
-        >
+        <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>
         <Button
@@ -186,11 +181,11 @@ EditAssigneeModal.propTypes = {
     duty_name: PropTypes.string.isRequired,
     person_id: PropTypes.number,
     assigned_date: PropTypes.string.isRequired,
-    due_date: PropTypes.string
+    due_date: PropTypes.string,
   }).isRequired,
   onClose: PropTypes.func.isRequired,
   onAssigneeUpdated: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool
+  isOpen: PropTypes.bool,
 };
 
 export default EditAssigneeModal;

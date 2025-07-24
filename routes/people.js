@@ -16,11 +16,11 @@ router.get('/', (req, res) => {
 // Create new person
 router.post('/', (req, res) => {
   const { name, email, phone } = req.body;
-  
+
   db.run(
     'INSERT INTO people (name, email, phone) VALUES (?, ?, ?)',
     [name, email, phone],
-    function(err) {
+    function (err) {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
@@ -33,11 +33,11 @@ router.post('/', (req, res) => {
 // Update person
 router.put('/:id', (req, res) => {
   const { name, email, phone } = req.body;
-  
+
   db.run(
     'UPDATE people SET name = ?, email = ?, phone = ? WHERE id = ?',
     [name, email, phone, req.params.id],
-    function(err) {
+    function (err) {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
@@ -49,7 +49,7 @@ router.put('/:id', (req, res) => {
 
 // Delete person (soft delete)
 router.delete('/:id', (req, res) => {
-  db.run('UPDATE people SET is_active = 0 WHERE id = ?', [req.params.id], function(err) {
+  db.run('UPDATE people SET is_active = 0 WHERE id = ?', [req.params.id], function (err) {
     if (err) {
       res.status(500).json({ error: err.message });
       return;

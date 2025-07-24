@@ -7,9 +7,9 @@ const DutyForm = ({ duty, onSubmit, onCancel }) => {
     description: '',
     frequency: 'daily',
     days_of_week: [],
-    is_group_duty: false
+    is_group_duty: false,
   });
-  
+
   useEffect(() => {
     if (duty) {
       let days_of_week = [];
@@ -25,59 +25,59 @@ const DutyForm = ({ duty, onSubmit, onCancel }) => {
         console.error('Error parsing days_of_week:', error);
         days_of_week = []; // Default to empty array if parsing fails
       }
-      
+
       setFormData({
         name: duty.name || '',
         description: duty.description || '',
         frequency: duty.frequency || 'daily',
         days_of_week: days_of_week,
-        is_group_duty: duty.is_group_duty === 1
+        is_group_duty: duty.is_group_duty === 1,
       });
     }
   }, [duty]);
-  
+
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFormData({
       ...formData,
-      [e.target.name]: value
+      [e.target.name]: value,
     });
   };
-  
+
   const handleFrequencyChange = (frequency, days) => {
     setFormData({
       ...formData,
       frequency,
-      days_of_week: days
+      days_of_week: days,
     });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       alert('Name is required');
       return;
     }
-    
+
     if (formData.frequency === 'weekly' && formData.days_of_week.length === 0) {
       alert('Please select at least one day of the week');
       return;
     }
-    
+
     // Make sure days_of_week is an array before submitting
     const submissionData = {
       ...formData,
-      days_of_week: Array.isArray(formData.days_of_week) ? formData.days_of_week : []
+      days_of_week: Array.isArray(formData.days_of_week) ? formData.days_of_week : [],
     };
-    
+
     if (duty) {
       onSubmit(duty.id, submissionData);
     } else {
       onSubmit(submissionData);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
@@ -91,7 +91,7 @@ const DutyForm = ({ duty, onSubmit, onCancel }) => {
           required
         />
       </div>
-      
+
       <div className="form-group">
         <label htmlFor="description">Description</label>
         <textarea
@@ -102,13 +102,13 @@ const DutyForm = ({ duty, onSubmit, onCancel }) => {
           rows="3"
         ></textarea>
       </div>
-      
-      <FrequencySelector 
+
+      <FrequencySelector
         frequency={formData.frequency}
         days={formData.days_of_week}
         onChange={handleFrequencyChange}
       />
-      
+
       <div className="form-group">
         <label>
           <input
@@ -116,16 +116,19 @@ const DutyForm = ({ duty, onSubmit, onCancel }) => {
             name="is_group_duty"
             checked={formData.is_group_duty}
             onChange={handleChange}
-          />
-          {' '}This is a group duty (can be assigned to multiple people)
+          />{' '}
+          This is a group duty (can be assigned to multiple people)
         </label>
         {formData.is_group_duty && (
           <div className="form-note">
-            <p>Group duties will be assigned to all active people when using the automatic assignment generator.</p>
+            <p>
+              Group duties will be assigned to all active people when using the automatic assignment
+              generator.
+            </p>
           </div>
         )}
       </div>
-      
+
       <div className="modal-footer">
         <button type="button" className="btn" onClick={onCancel}>
           Cancel

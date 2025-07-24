@@ -79,9 +79,9 @@ module.exports = {
   theme: {
     extend: {
       // Add custom colors, spacing, etc.
-    }
-  }
-}
+    },
+  },
+};
 ```
 
 ## Best Practices

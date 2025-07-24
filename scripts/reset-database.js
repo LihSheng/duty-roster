@@ -8,13 +8,13 @@ console.log('🔄 Resetting database...');
 
 db.serialize(() => {
   // Drop all tables
-  db.run("DROP TABLE IF EXISTS assignments");
-  db.run("DROP TABLE IF EXISTS duties");
-  db.run("DROP TABLE IF EXISTS people");
-  db.run("DROP TABLE IF EXISTS settings");
-  
+  db.run('DROP TABLE IF EXISTS assignments');
+  db.run('DROP TABLE IF EXISTS duties');
+  db.run('DROP TABLE IF EXISTS people');
+  db.run('DROP TABLE IF EXISTS settings');
+
   console.log('✓ All tables dropped');
-  
+
   // Recreate tables (same as in db.js)
   db.run(`CREATE TABLE IF NOT EXISTS people (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,19 +50,22 @@ db.serialize(() => {
     FOREIGN KEY (person_id) REFERENCES people (id)
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS settings (
+  db.run(
+    `CREATE TABLE IF NOT EXISTS settings (
     key TEXT PRIMARY KEY,
     value TEXT,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`, (err) => {
-    if (err) {
-      console.error('❌ Error creating tables:', err);
-    } else {
-      console.log('✓ Tables recreated successfully');
-      console.log('\n✅ Database reset complete!');
-      console.log('💡 Run "npm run seed" to populate with demo data');
+  )`,
+    (err) => {
+      if (err) {
+        console.error('❌ Error creating tables:', err);
+      } else {
+        console.log('✓ Tables recreated successfully');
+        console.log('\n✅ Database reset complete!');
+        console.log('💡 Run "npm run seed" to populate with demo data');
+      }
+
+      db.close();
     }
-    
-    db.close();
-  });
+  );
 });

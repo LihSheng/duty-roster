@@ -10,7 +10,7 @@ describe('ModalFooter', () => {
         <button>Confirm</button>
       </ModalFooter>
     );
-    
+
     expect(screen.getByText('Cancel')).toBeInTheDocument();
     expect(screen.getByText('Confirm')).toBeInTheDocument();
   });
@@ -22,7 +22,7 @@ describe('ModalFooter', () => {
         <button>Confirm</button>
       </ModalFooter>
     );
-    
+
     // Get the parent div of the buttons
     const footerElement = screen.getByText('Cancel').closest('div');
     expect(footerElement).toHaveClass('custom-footer-class');

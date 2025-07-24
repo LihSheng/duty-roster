@@ -9,23 +9,23 @@ const Settings = () => {
     auto_assign_next: true,
     reminder_days: 1,
     admin_email: '',
-    company_name: 'Duty Roster'
+    company_name: 'Duty Roster',
   });
-  
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  
+
   useEffect(() => {
     fetchSettings();
   }, []);
-  
+
   const fetchSettings = async () => {
     try {
       const res = await axios.get('/api/admin/settings');
-      
+
       if (Object.keys(res.data).length > 0) {
         const parsedSettings = {};
-        
+
         // Parse JSON values
         Object.entries(res.data).forEach(([key, value]) => {
           try {
@@ -34,10 +34,10 @@ const Settings = () => {
             parsedSettings[key] = value;
           }
         });
-        
+
         setSettings({ ...settings, ...parsedSettings });
       }
-      
+
       setLoading(false);
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -45,28 +45,28 @@ const Settings = () => {
       toast.error('Failed to load settings');
     }
   };
-  
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     setSettings({
       ...settings,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
-  
+
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
     setSettings({
       ...settings,
-      [name]: parseInt(value, 10)
+      [name]: parseInt(value, 10),
     });
   };
-  
+
   const saveSettings = async (e) => {
     e.preventDefault();
     setSaving(true);
-    
+
     try {
       await axios.post('/api/admin/settings', settings);
       toast.success('Settings saved successfully');
@@ -77,20 +77,20 @@ const Settings = () => {
       setSaving(false);
     }
   };
-  
+
   if (loading) {
     return <div className="text-center mt-3">Loading settings...</div>;
   }
-  
+
   return (
     <div>
       <h1 className="mb-3">Settings</h1>
-      
+
       <div className="card">
         <div className="card-header">
           <h2>Application Settings</h2>
         </div>
-        
+
         <form onSubmit={saveSettings} className="p-2">
           <div className="form-group">
             <label htmlFor="company_name">Organization Name</label>
@@ -102,7 +102,7 @@ const Settings = () => {
               onChange={handleChange}
             />
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="admin_email">Admin Email</label>
             <input
@@ -112,13 +112,11 @@ const Settings = () => {
               value={settings.admin_email}
               onChange={handleChange}
             />
-            <small className="form-text">
-              Used for system notifications and alerts
-            </small>
+            <small className="form-text">Used for system notifications and alerts</small>
           </div>
-          
+
           <h3 className="mt-3 mb-2">Notification Settings</h3>
-          
+
           <div className="form-group">
             <div>
               <input
@@ -133,7 +131,7 @@ const Settings = () => {
               </label>
             </div>
           </div>
-          
+
           <div className="form-group">
             <div>
               <input
@@ -148,7 +146,7 @@ const Settings = () => {
               </label>
             </div>
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="reminder_days">Reminder Days</label>
             <input
@@ -160,13 +158,11 @@ const Settings = () => {
               value={settings.reminder_days}
               onChange={handleNumberChange}
             />
-            <small className="form-text">
-              Number of days before due date to send reminders
-            </small>
+            <small className="form-text">Number of days before due date to send reminders</small>
           </div>
-          
+
           <h3 className="mt-3 mb-2">Assignment Settings</h3>
-          
+
           <div className="form-group">
             <div>
               <input
@@ -181,12 +177,8 @@ const Settings = () => {
               </label>
             </div>
           </div>
-          
-          <button
-            type="submit"
-            className="btn btn-primary mt-2"
-            disabled={saving}
-          >
+
+          <button type="submit" className="btn btn-primary mt-2" disabled={saving}>
             {saving ? 'Saving...' : 'Save Settings'}
           </button>
         </form>

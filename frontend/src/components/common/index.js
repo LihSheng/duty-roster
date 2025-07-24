@@ -8,16 +8,11 @@ export {
   TextArea,
   FormGroup,
   FormLabel,
-  FormError
+  FormError,
 } from './ui';
 
 // Export all Modal components
-export {
-  BaseModal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
-} from './modal';
+export { BaseModal, ModalHeader, ModalBody, ModalFooter } from './modal';
 
 // Export other common components
 export { default as ConfirmationModal } from './ConfirmationModal';

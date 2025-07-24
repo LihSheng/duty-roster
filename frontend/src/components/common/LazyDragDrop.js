@@ -12,7 +12,7 @@ const LazyDragDrop = ({ children, onDragEnd, ...props }) => {
         setDragDropComponents({
           DragDropContext: module.DragDropContext,
           Droppable: module.Droppable,
-          Draggable: module.Draggable
+          Draggable: module.Draggable,
         });
       } catch (error) {
         console.error('Failed to load drag and drop library:', error);
@@ -55,7 +55,7 @@ export const useDragDropComponents = () => {
       const module = await import('react-beautiful-dnd');
       setComponents({
         Droppable: module.Droppable,
-        Draggable: module.Draggable
+        Draggable: module.Draggable,
       });
     };
     loadComponents();

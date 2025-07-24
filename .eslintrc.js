@@ -21,12 +21,7 @@ module.exports = {
     },
     parser: '@babel/eslint-parser',
   },
-  plugins: [
-    'react',
-    'react-hooks',
-    'import',
-    'jsx-a11y',
-  ],
+  plugins: ['react', 'react-hooks', 'import', 'jsx-a11y'],
   settings: {
     react: {
       version: 'detect',
@@ -44,14 +39,20 @@ module.exports = {
     'no-duplicate-imports': 'error',
     'no-var': 'error',
     'prefer-const': 'error',
-    
+    'prefer-arrow-callback': 'error',
+    'func-style': ['error', 'expression', { allowArrowFunctions: true }],
+    'padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: '*', next: 'return' },
+    ],
+
     // React specific rules
     'react/prop-types': 'error',
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-    
+
     // Import rules
     'import/order': [
       'error',
@@ -61,7 +62,7 @@ module.exports = {
         alphabetize: { order: 'asc', caseInsensitive: true },
       },
     ],
-    
+
     // Accessibility rules
     'jsx-a11y/alt-text': 'error',
     'jsx-a11y/anchor-has-content': 'error',
@@ -71,7 +72,13 @@ module.exports = {
   overrides: [
     {
       // Backend Node.js files
-      files: ['server.js', 'routes/**/*.js', 'services/**/*.js', 'database/**/*.js', 'scripts/**/*.js'],
+      files: [
+        'server.js',
+        'routes/**/*.js',
+        'services/**/*.js',
+        'database/**/*.js',
+        'scripts/**/*.js',
+      ],
       env: {
         browser: false,
         node: true,

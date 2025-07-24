@@ -9,7 +9,7 @@ describe('ModalBody', () => {
         <p>Modal Content</p>
       </ModalBody>
     );
-    
+
     expect(screen.getByText('Modal Content')).toBeInTheDocument();
   });
 
@@ -19,7 +19,7 @@ describe('ModalBody', () => {
         <p>Modal Content</p>
       </ModalBody>
     );
-    
+
     // Get the parent div of the content
     const bodyElement = screen.getByText('Modal Content').closest('div');
     expect(bodyElement).toHaveClass('custom-body-class');

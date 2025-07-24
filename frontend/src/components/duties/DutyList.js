@@ -8,11 +8,11 @@ const DutyList = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [currentDuty, setCurrentDuty] = useState(null);
-  
+
   useEffect(() => {
     fetchDuties();
   }, []);
-  
+
   const fetchDuties = async () => {
     try {
       const res = await axios.get('/api/duties');
@@ -24,7 +24,7 @@ const DutyList = () => {
       toast.error('Failed to load duties');
     }
   };
-  
+
   const addDuty = async (dutyData) => {
     try {
       const res = await axios.post('/api/duties', dutyData);
@@ -36,11 +36,11 @@ const DutyList = () => {
       toast.error('Failed to create duty');
     }
   };
-  
+
   const updateDuty = async (id, dutyData) => {
     try {
       await axios.put(`/api/duties/${id}`, dutyData);
-      setDuties(duties.map(d => (d.id === id ? { ...d, ...dutyData } : d)));
+      setDuties(duties.map((d) => (d.id === id ? { ...d, ...dutyData } : d)));
       setShowForm(false);
       setCurrentDuty(null);
       toast.success('Duty updated successfully');
@@ -49,12 +49,12 @@ const DutyList = () => {
       toast.error('Failed to update duty');
     }
   };
-  
+
   const deleteDuty = async (id) => {
     if (window.confirm('Are you sure you want to delete this duty?')) {
       try {
         await axios.delete(`/api/duties/${id}`);
-        setDuties(duties.filter(d => d.id !== id));
+        setDuties(duties.filter((d) => d.id !== id));
         toast.success('Duty deleted successfully');
       } catch (error) {
         console.error('Error deleting duty:', error);
@@ -62,17 +62,17 @@ const DutyList = () => {
       }
     }
   };
-  
+
   const openEditForm = (duty) => {
     setCurrentDuty(duty);
     setShowForm(true);
   };
-  
+
   const closeForm = () => {
     setShowForm(false);
     setCurrentDuty(null);
   };
-  
+
   const formatFrequency = (duty) => {
     if (duty.frequency === 'daily') {
       return 'Daily';
@@ -90,9 +90,13 @@ const DutyList = () => {
         console.error('Error parsing days_of_week:', error, duty.days_of_week);
         days = [1, 2, 3, 4, 5]; // Default to Mon-Fri if parsing fails
       }
-      
+
       const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      return `Working Days (${days.map(d => dayNames[d] || '').filter(Boolean).join(', ')})`;
+
+      return `Working Days (${days
+        .map((d) => dayNames[d] || '')
+        .filter(Boolean)
+        .join(', ')})`;
     } else if (duty.frequency === 'weekly') {
       let days = [];
       try {
@@ -107,9 +111,15 @@ const DutyList = () => {
         console.error('Error parsing days_of_week:', error, duty.days_of_week);
         days = []; // Default to empty array if parsing fails
       }
-      
+
       const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      return `Weekly (${days.map(d => dayNames[d] || '').filter(Boolean).join(', ') || 'No days selected'})`;
+
+      return `Weekly (${
+        days
+          .map((d) => dayNames[d] || '')
+          .filter(Boolean)
+          .join(', ') || 'No days selected'
+      })`;
     } else if (duty.frequency === 'monthly') {
       let days = [];
       try {
@@ -124,14 +134,23 @@ const DutyList = () => {
         console.error('Error parsing days_of_week:', error, duty.days_of_week);
         days = [-1, 5]; // Default to last Friday if parsing fails
       }
-      
-      const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+      const dayNames = [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ];
       const weekNames = ['First', 'Second', 'Third', 'Fourth', 'Last'];
-      
+
       if (days.length >= 2) {
         const [week, day] = days;
         const weekName = week === -1 ? 'Last' : weekNames[week - 1] || 'Unknown';
         const dayName = dayNames[day] || 'Unknown';
+
         return `Monthly (${weekName} ${dayName})`;
       } else if (duty.name === 'House keeping') {
         return 'Monthly (Last Friday)';
@@ -144,11 +163,11 @@ const DutyList = () => {
       return duty.frequency || 'Unknown';
     }
   };
-  
+
   if (loading) {
     return <div className="text-center mt-3">Loading...</div>;
   }
-  
+
   return (
     <div>
       <div className="flex-between mb-3">
@@ -157,7 +176,7 @@ const DutyList = () => {
           Add Duty
         </button>
       </div>
-      
+
       {showForm && (
         <div className="modal-overlay">
           <div className="modal">
@@ -177,7 +196,7 @@ const DutyList = () => {
           </div>
         </div>
       )}
-      
+
       {duties.length === 0 ? (
         <p>No duties found. Add a duty to get started.</p>
       ) : (
@@ -193,7 +212,7 @@ const DutyList = () => {
               </tr>
             </thead>
             <tbody>
-              {duties.map(duty => (
+              {duties.map((duty) => (
                 <tr key={duty.id}>
                   <td>{duty.name}</td>
                   <td>{duty.description || '-'}</td>
@@ -206,10 +225,7 @@ const DutyList = () => {
                     >
                       Edit
                     </button>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => deleteDuty(duty.id)}
-                    >
+                    <button className="btn btn-danger btn-sm" onClick={() => deleteDuty(duty.id)}>
                       Delete
                     </button>
                   </td>

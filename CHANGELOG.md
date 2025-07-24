@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🎉 Initial Release
 
 #### ✨ Added
+
 - **Core Features**
   - People management with contact information
   - Duty creation with flexible scheduling (daily, weekly, custom)
@@ -49,12 +50,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Production build optimization
 
 #### 🛠️ Technical Implementation
+
 - **Frontend**: React 18+, Tailwind CSS, Webpack 5
 - **Backend**: Node.js, Express.js, SQLite3
 - **Build System**: Webpack with code splitting and optimization
 - **Deployment**: Render-ready with environment configuration
 
 #### 📊 Demo Data
+
 - 6 sample people with realistic names and contact info
 - 8 household duties with various frequencies
 - 49 pre-generated assignments spanning 3 weeks
@@ -62,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Realistic completion notes and timestamps
 
 #### 🚀 Deployment Features
+
 - One-click deployment to Render
 - Environment variable configuration
 - Production build optimization
@@ -69,6 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lazy loading for improved performance
 
 #### 📚 Documentation
+
 - Comprehensive README with setup instructions
 - Detailed API documentation
 - Deployment guide for multiple platforms
@@ -76,6 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Troubleshooting guide
 
 ### 🔧 Configuration
+
 - Environment-based configuration
 - Gmail app password support
 - Configurable reminder timing
@@ -83,6 +89,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Database path customization
 
 ### 🎯 Performance Optimizations
+
 - Code splitting with lazy loading
 - Vendor bundle separation
 - CSS optimization with Tailwind purging
@@ -94,57 +101,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Planned Features (Roadmap)
 
 ### [1.1.0] - Planned
+
 #### 🔐 Authentication & Security
+
 - User authentication system
 - Role-based access control (Admin, Member, Viewer)
 - Session management
 - Password reset functionality
 
 #### 📊 Analytics & Reporting
+
 - Completion rate statistics
 - Individual performance tracking
 - Weekly/monthly summary reports
 - Export functionality (CSV, PDF)
 
 #### 🔔 Enhanced Notifications
+
 - In-app notifications
 - Push notifications for mobile
 - Slack integration
 - Discord bot integration
 
 ### [1.2.0] - Planned
+
 #### 📱 Mobile App
+
 - React Native mobile application
 - Offline capability
 - Push notifications
 - Camera integration for completion photos
 
 #### 🏠 Multi-Household Support
+
 - Multiple household management
 - Household switching
 - Shared duties between households
 - Household-specific settings
 
 #### 🎨 Customization
+
 - Custom themes and branding
 - Configurable duty categories
 - Custom fields for duties and people
 - Personalized dashboard layouts
 
 ### [1.3.0] - Planned
+
 #### 🤖 Smart Features
+
 - AI-powered duty suggestions
 - Automatic assignment balancing
 - Predictive overdue detection
 - Smart reminder timing
 
 #### 🔗 Integrations
+
 - Google Calendar sync
 - Apple Calendar integration
 - IFTTT/Zapier webhooks
 - Smart home device integration
 
 #### 📈 Advanced Analytics
+
 - Trend analysis
 - Seasonal duty adjustments
 - Performance predictions
@@ -154,9 +173,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-| Version | Release Date | Key Features |
-|---------|--------------|--------------|
-| 1.0.0 | 2024-01-15 | Initial release with core functionality |
+| Version | Release Date | Key Features                            |
+| ------- | ------------ | --------------------------------------- |
+| 1.0.0   | 2024-01-15   | Initial release with core functionality |
 
 ---
 
@@ -165,6 +184,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### From Development to Production
 
 1. **Environment Variables**
+
    ```bash
    # Update these for production
    NODE_ENV=production

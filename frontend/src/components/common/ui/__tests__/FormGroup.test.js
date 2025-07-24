@@ -9,7 +9,7 @@ describe('FormGroup', () => {
         <div data-testid="test-child">Test Child</div>
       </FormGroup>
     );
-    
+
     const child = screen.getByTestId('test-child');
     expect(child).toBeInTheDocument();
     expect(child).toHaveTextContent('Test Child');
@@ -21,7 +21,7 @@ describe('FormGroup', () => {
         <div>Test Child</div>
       </FormGroup>
     );
-    
+
     const formGroup = screen.getByText('Test Child').parentElement;
     expect(formGroup).toHaveClass('mb-4');
   });
@@ -32,7 +32,7 @@ describe('FormGroup', () => {
         <div>Test Child</div>
       </FormGroup>
     );
-    
+
     const formGroup = screen.getByText('Test Child').parentElement;
     expect(formGroup).toHaveClass('test-class');
   });
@@ -43,7 +43,7 @@ describe('FormGroup', () => {
         <div>Test Child</div>
       </FormGroup>
     );
-    
+
     const formGroup = screen.getByTestId('form-group');
     expect(formGroup).toBeInTheDocument();
   });

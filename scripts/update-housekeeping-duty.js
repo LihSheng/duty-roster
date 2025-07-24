@@ -8,7 +8,7 @@ const updateHouseKeepingDuty = () => {
       console.error('Error checking for House keeping duty:', err);
       return;
     }
-    
+
     if (duty) {
       console.log('House keeping duty exists, updating to new format...');
       // Update the existing duty to have monthly frequency with the new format
@@ -32,9 +32,9 @@ const updateHouseKeepingDuty = () => {
           'House keeping',
           'Monthly house cleaning on the last Friday of each month. All people are involved.',
           'monthly',
-          JSON.stringify([-1, 5]) // -1 = last week, 5 = Friday
+          JSON.stringify([-1, 5]), // -1 = last week, 5 = Friday
         ],
-        function(err) {
+        function (err) {
           if (err) {
             console.error('Error creating House keeping duty:', err);
             return;

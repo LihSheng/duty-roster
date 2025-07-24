@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
-  
+
   return {
     entry: './src/index.js',
     output: {
@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
       filename: isProduction ? '[name].[contenthash].js' : 'bundle.js',
       chunkFilename: isProduction ? '[name].[contenthash].chunk.js' : '[name].chunk.js',
       publicPath: '/',
-      clean: true
+      clean: true,
     },
     module: {
       rules: [
@@ -19,8 +19,8 @@ module.exports = (env, argv) => {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader'
-          }
+            loader: 'babel-loader',
+          },
         },
         {
           test: /\.css$/,
@@ -31,70 +31,71 @@ module.exports = (env, argv) => {
               loader: 'postcss-loader',
               options: {
                 postcssOptions: {
-                  plugins: [
-                    require('tailwindcss'),
-                    require('autoprefixer'),
-                  ],
+                  plugins: [require('tailwindcss'), require('autoprefixer')],
                 },
               },
             },
           ],
-        }
-      ]
+        },
+      ],
     },
     resolve: {
-      extensions: ['.js', '.jsx']
+      extensions: ['.js', '.jsx'],
     },
-    optimization: isProduction ? {
-      splitChunks: {
-        chunks: 'all',
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
+    optimization: isProduction
+      ? {
+          splitChunks: {
             chunks: 'all',
+            cacheGroups: {
+              vendor: {
+                test: /[\\/]node_modules[\\/]/,
+                name: 'vendors',
+                chunks: 'all',
+              },
+              react: {
+                test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+                name: 'react',
+                chunks: 'all',
+              },
+            },
           },
-          react: {
-            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-            name: 'react',
-            chunks: 'all',
-          }
+          usedExports: true,
+          sideEffects: false,
         }
-      },
-      usedExports: true,
-      sideEffects: false
-    } : {},
+      : {},
     plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      minify: isProduction ? {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      } : false
-    })
-  ],
-  devServer: {
-    historyApiFallback: true,
-    port: 3000,
-    proxy: [
-      {
-        context: ['/api'],
-        target: 'http://localhost:5000'
-      }
-    ]
-  },
-  performance: {
-    maxAssetSize: 512000,
-    maxEntrypointSize: 512000,
-    hints: isProduction ? 'warning' : false
-  }
-};
+      new HtmlWebpackPlugin({
+        template: './public/index.html',
+        minify: isProduction
+          ? {
+              removeComments: true,
+              collapseWhitespace: true,
+              removeRedundantAttributes: true,
+              useShortDoctype: true,
+              removeEmptyAttributes: true,
+              removeStyleLinkTypeAttributes: true,
+              keepClosingSlash: true,
+              minifyJS: true,
+              minifyCSS: true,
+              minifyURLs: true,
+            }
+          : false,
+      }),
+    ],
+    devServer: {
+      historyApiFallback: true,
+      port: 3000,
+      proxy: [
+        {
+          context: ['/api'],
+          target: 'http://localhost:5000',
+        },
+      ],
+    },
+    performance: {
+      maxAssetSize: 512000,
+      maxEntrypointSize: 512000,
+      hints: isProduction ? 'warning' : false,
+    },
+  };
 };

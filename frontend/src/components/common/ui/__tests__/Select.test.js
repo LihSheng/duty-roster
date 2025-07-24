@@ -23,7 +23,7 @@ describe('Select', () => {
     expect(select).toBeInTheDocument();
     expect(select).toHaveAttribute('id', 'test-select');
     expect(select).toHaveAttribute('name', 'test-select');
-    
+
     const optionElements = screen.getAllByRole('option');
     expect(optionElements).toHaveLength(3);
     expect(optionElements[0]).toHaveTextContent('Option 1');

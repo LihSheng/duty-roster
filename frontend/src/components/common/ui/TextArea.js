@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 /**
  * TextArea component for multiline text input with validation support
- * 
+ *
  * @param {Object} props - Component props
  * @param {string} props.id - TextArea ID
  * @param {string} props.name - TextArea name
@@ -31,16 +31,19 @@ const TextArea = ({
   ...rest
 }) => {
   // Base classes for the textarea
-  const baseClasses = 'block w-full px-3 py-2 rounded-md transition-colors focus:outline-none focus:ring-2';
-  
+  const baseClasses =
+    'block w-full px-3 py-2 rounded-md transition-colors focus:outline-none focus:ring-2';
+
   // Error state classes
   const errorClasses = error
     ? 'border-danger-600 focus:border-danger-600 focus:ring-danger-500'
     : 'border-light-300 focus:border-primary-500 focus:ring-primary-500 dark:border-dark-600';
-  
+
   // Disabled state classes
-  const disabledClasses = disabled ? 'bg-light-100 cursor-not-allowed dark:bg-dark-700' : 'bg-white dark:bg-dark-800';
-  
+  const disabledClasses = disabled
+    ? 'bg-light-100 cursor-not-allowed dark:bg-dark-700'
+    : 'bg-white dark:bg-dark-800';
+
   // Combine all classes
   const textareaClasses = `${baseClasses} ${errorClasses} ${disabledClasses} ${className}`;
 

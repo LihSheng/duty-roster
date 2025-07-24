@@ -16,7 +16,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
   const handleFrequencyChange = (e) => {
     const newFrequency = e.target.value;
     setSelectedFrequency(newFrequency);
-    
+
     // Set default days based on frequency
     let newDays = [];
     if (newFrequency === 'daily') {
@@ -37,20 +37,20 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
         newDays = [monthlyWeek, monthlyDay];
       }
     }
-    
+
     onChange(newFrequency, newDays);
   };
 
   const handleDayToggle = (day) => {
     let newDays = [...selectedDays];
-    
+
     if (newDays.includes(day)) {
-      newDays = newDays.filter(d => d !== day);
+      newDays = newDays.filter((d) => d !== day);
     } else {
       newDays.push(day);
       newDays.sort((a, b) => a - b);
     }
-    
+
     setSelectedDays(newDays);
     onChange(selectedFrequency, newDays);
   };
@@ -58,7 +58,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
   const handleMonthlyOptionChange = (e) => {
     const option = e.target.value;
     setMonthlyOption(option);
-    
+
     let newDays = [];
     if (option === 'last') {
       newDays = [-1, monthlyDay];
@@ -67,7 +67,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
     } else {
       newDays = [monthlyWeek, monthlyDay];
     }
-    
+
     setSelectedDays(newDays);
     onChange(selectedFrequency, newDays);
   };
@@ -75,7 +75,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
   const handleMonthlyDayChange = (e) => {
     const day = parseInt(e.target.value);
     setMonthlyDay(day);
-    
+
     let newDays = [];
     if (monthlyOption === 'last') {
       newDays = [-1, day];
@@ -84,7 +84,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
     } else {
       newDays = [monthlyWeek, day];
     }
-    
+
     setSelectedDays(newDays);
     onChange(selectedFrequency, newDays);
   };
@@ -92,7 +92,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
   const handleMonthlyWeekChange = (e) => {
     const week = parseInt(e.target.value);
     setMonthlyWeek(week);
-    
+
     const newDays = [week, monthlyDay];
     setSelectedDays(newDays);
     onChange(selectedFrequency, newDays);
@@ -100,7 +100,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
 
   const renderTooltip = (text) => {
     if (!showTooltips) return null;
-    
+
     return (
       <div className="tooltip">
         <span className="tooltip-icon">?</span>
@@ -130,7 +130,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
       {selectedFrequency === 'weekly' && (
         <div className="form-group">
           <label>Days of Week</label>
-          {renderTooltip("Select which days of the week this duty should be assigned.")}
+          {renderTooltip('Select which days of the week this duty should be assigned.')}
           <div className="days-grid">
             {[
               { value: 0, label: 'Sun' },
@@ -139,8 +139,8 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
               { value: 3, label: 'Wed' },
               { value: 4, label: 'Thu' },
               { value: 5, label: 'Fri' },
-              { value: 6, label: 'Sat' }
-            ].map(day => (
+              { value: 6, label: 'Sat' },
+            ].map((day) => (
               <div key={day.value} className="day-checkbox">
                 <input
                   type="checkbox"
@@ -158,7 +158,9 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
       {selectedFrequency === 'working_days' && (
         <div className="form-group">
           <label>Customize Working Days</label>
-          {renderTooltip("By default, working days are Monday to Friday. You can customize which days are considered working days.")}
+          {renderTooltip(
+            'By default, working days are Monday to Friday. You can customize which days are considered working days.'
+          )}
           <div className="days-grid">
             {[
               { value: 0, label: 'Sun' },
@@ -167,8 +169,8 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
               { value: 3, label: 'Wed' },
               { value: 4, label: 'Thu' },
               { value: 5, label: 'Fri' },
-              { value: 6, label: 'Sat' }
-            ].map(day => (
+              { value: 6, label: 'Sat' },
+            ].map((day) => (
               <div key={day.value} className="day-checkbox">
                 <input
                   type="checkbox"
@@ -176,7 +178,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
                   checked={workingDays.includes(day.value)}
                   onChange={() => {
                     const newWorkingDays = workingDays.includes(day.value)
-                      ? workingDays.filter(d => d !== day.value)
+                      ? workingDays.filter((d) => d !== day.value)
                       : [...workingDays, day.value].sort();
                     setWorkingDays(newWorkingDays);
                     setSelectedDays(newWorkingDays);
@@ -194,7 +196,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
         <div className="monthly-options">
           <div className="form-group">
             <label>Monthly Option</label>
-            {renderTooltip("Choose how to schedule the monthly duty.")}
+            {renderTooltip('Choose how to schedule the monthly duty.')}
             <select
               value={monthlyOption}
               onChange={handleMonthlyOptionChange}
@@ -208,11 +210,7 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
 
           <div className="form-group">
             <label>Day of Week</label>
-            <select
-              value={monthlyDay}
-              onChange={handleMonthlyDayChange}
-              className="form-control"
-            >
+            <select value={monthlyDay} onChange={handleMonthlyDayChange} className="form-control">
               <option value={0}>Sunday</option>
               <option value={1}>Monday</option>
               <option value={2}>Tuesday</option>
@@ -226,7 +224,9 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
           {monthlyOption === 'specific' && (
             <div className="form-group">
               <label>Week of Month</label>
-              {renderTooltip("If the selected week doesn't have the specified day (e.g., 5th Sunday), the duty will be assigned to the last occurrence of that day in the month.")}
+              {renderTooltip(
+                "If the selected week doesn't have the specified day (e.g., 5th Sunday), the duty will be assigned to the last occurrence of that day in the month."
+              )}
               <select
                 value={monthlyWeek}
                 onChange={handleMonthlyWeekChange}
@@ -242,7 +242,8 @@ const FrequencySelector = ({ frequency, days, onChange, showTooltips = true }) =
 
           <div className="form-note">
             <small>
-              <strong>Note:</strong> If the selected day falls on a non-working day, the duty will be assigned to the last working day before it.
+              <strong>Note:</strong> If the selected day falls on a non-working day, the duty will
+              be assigned to the last working day before it.
             </small>
           </div>
         </div>

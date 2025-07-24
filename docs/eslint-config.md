@@ -20,6 +20,7 @@ Our ESLint configuration enforces consistent coding standards across both fronte
 ## Key Rules
 
 ### JavaScript Rules
+
 - No console logs (except warnings and errors)
 - No unused variables
 - No duplicate imports
@@ -27,17 +28,20 @@ Our ESLint configuration enforces consistent coding standards across both fronte
 - Prefer const over let when possible
 
 ### React Rules
+
 - Enforce prop types
 - Enforce React Hooks rules
 - Proper JSX formatting and indentation
 - Self-closing components when appropriate
 
 ### Import Rules
+
 - Organized imports by type (built-in, external, internal)
 - Alphabetical ordering
 - Newlines between import groups
 
 ### Accessibility Rules
+
 - Require alt text for images
 - Proper ARIA attributes
 - Valid anchor content
@@ -70,6 +74,7 @@ To customize the ESLint configuration:
 ## Adding New Rules
 
 When adding new rules, consider:
+
 - Is it essential for code quality?
 - Will it cause excessive noise?
 - Is it aligned with the team's coding style?

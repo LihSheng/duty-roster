@@ -72,7 +72,9 @@ The Duty Roster application currently has several modal components that share si
 3. WHEN the reusable components are implemented THEN the system SHALL refactor EditAssigneeModal to use the BaseModal and form components.
 4. WHEN existing components are refactored THEN the system SHALL maintain all current functionality.
 5. WHEN existing components are refactored THEN the system SHALL improve the visual consistency across the application.
+
 #
+
 ## Requirement 6
 
 **User Story:** As a developer, I want to implement a modern styling approach, so that the application has a consistent, visually appealing, and responsive design.

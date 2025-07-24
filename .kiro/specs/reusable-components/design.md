@@ -58,13 +58,7 @@ The BaseModal component will serve as the foundation for all modal dialogs in th
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-const BaseModal = ({
-  isOpen,
-  onClose,
-  children,
-  size = 'medium',
-  className = '',
-}) => {
+const BaseModal = ({ isOpen, onClose, children, size = 'medium', className = '' }) => {
   // Implementation details
 };
 
@@ -160,12 +154,7 @@ The LoadingIndicator component will provide a consistent way to display loading 
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const LoadingIndicator = ({
-  size = 'medium',
-  text = '',
-  centered = false,
-  className = '',
-}) => {
+const LoadingIndicator = ({ size = 'medium', text = '', centered = false, className = '' }) => {
   // Implementation details
 };
 
@@ -232,7 +221,7 @@ Example implementation:
 // Navbar.js
 const Navbar = () => {
   const location = useLocation();
-  
+
   return (
     <nav className="navbar bg-primary-700 text-white p-3 shadow-md">
       <div className="container mx-auto flex items-center justify-between">
@@ -242,11 +231,11 @@ const Navbar = () => {
           </h1>
           <ul className="flex space-x-6">
             <li>
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className={`hover:text-primary-200 transition-colors ${
-                  location.pathname === '/' 
-                    ? 'text-white font-medium border-b-2 border-white pb-1' 
+                  location.pathname === '/'
+                    ? 'text-white font-medium border-b-2 border-white pb-1'
                     : 'text-primary-100'
                 }`}
               >
@@ -277,24 +266,22 @@ Example for Button component:
 ```jsx
 const getButtonClasses = (variant, size, disabled, isLoading) => {
   const baseClasses = 'font-medium rounded focus:outline-none transition-colors';
-  
+
   const variantClasses = {
     primary: 'bg-primary-600 text-white hover:bg-primary-700',
     secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
     danger: 'bg-red-600 text-white hover:bg-red-700',
     success: 'bg-green-600 text-white hover:bg-green-700',
   };
-  
+
   const sizeClasses = {
     small: 'py-1 px-2 text-sm',
     medium: 'py-2 px-4 text-base',
     large: 'py-3 px-6 text-lg',
   };
-  
-  const stateClasses = disabled || isLoading
-    ? 'opacity-50 cursor-not-allowed'
-    : 'cursor-pointer';
-  
+
+  const stateClasses = disabled || isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
+
   return `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${stateClasses}`;
 };
 ```
@@ -347,12 +334,8 @@ import PropTypes from 'prop-types';
 
 const FormError = ({ error }) => {
   if (!error) return null;
-  
-  return (
-    <div className="text-red-600 text-sm mt-1">
-      {error}
-    </div>
-  );
+
+  return <div className="text-red-600 text-sm mt-1">{error}</div>;
 };
 
 FormError.propTypes = {
@@ -388,14 +371,14 @@ describe('Button', () => {
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('bg-primary-600');
   });
-  
+
   test('calls onClick when clicked', () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
     fireEvent.click(screen.getByText('Click me'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
-  
+
   // ... other tests
 });
 ```
@@ -442,6 +425,7 @@ To ensure optimal performance:
 3. React.memo will be used for components that don't need frequent re-renders
 4. Event handlers will be memoized with useCallback
 5. Component state will be optimized to avoid unnecessary updates
+
 ## UI Design Principles
 
 The application follows these key UI design principles:

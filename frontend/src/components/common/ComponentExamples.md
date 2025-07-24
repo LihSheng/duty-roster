@@ -324,14 +324,7 @@ import { BaseModal, ModalHeader, ModalBody, ModalFooter, Button } from '../compo
 ### FormGroup, FormLabel, FormError
 
 ```jsx
-import { 
-  FormGroup, 
-  FormLabel, 
-  FormError, 
-  TextInput, 
-  Select, 
-  Checkbox 
-} from '../components/common';
+import { FormGroup, FormLabel, FormError, TextInput, Select, Checkbox } from '../components/common';
 
 // Basic form layout
 <form onSubmit={handleSubmit}>
@@ -347,7 +340,7 @@ import {
     />
     {errors.name && <FormError>{errors.name}</FormError>}
   </FormGroup>
-  
+
   <FormGroup>
     <FormLabel htmlFor="email">Email Address</FormLabel>
     <TextInput
@@ -361,7 +354,7 @@ import {
     />
     {errors.email && <FormError>{errors.email}</FormError>}
   </FormGroup>
-  
+
   <FormGroup>
     <FormLabel htmlFor="role">Role</FormLabel>
     <Select
@@ -377,7 +370,7 @@ import {
     </Select>
     {errors.role && <FormError>{errors.role}</FormError>}
   </FormGroup>
-  
+
   <FormGroup>
     <Checkbox
       id="terms"
@@ -389,9 +382,9 @@ import {
     />
     {errors.terms && <FormError>{errors.terms}</FormError>}
   </FormGroup>
-  
+
   <Button type="submit">Submit</Button>
-</form>
+</form>;
 ```
 
 ## Complete Form Example
@@ -406,7 +399,7 @@ import {
   TextArea,
   FormGroup,
   FormLabel,
-  FormError
+  FormError,
 } from '../components/common';
 
 const ExampleForm = () => {
@@ -415,35 +408,35 @@ const ExampleForm = () => {
     email: '',
     role: '',
     message: '',
-    agreeTerms: false
+    agreeTerms: false,
   });
-  
+
   const [errors, setErrors] = useState({});
-  
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
-  
+
   const validate = () => {
     const newErrors = {};
-    
+
     if (!formData.name) newErrors.name = 'Name is required';
     if (!formData.email) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
     if (!formData.role) newErrors.role = 'Role is required';
     if (!formData.agreeTerms) newErrors.agreeTerms = 'You must agree to the terms';
-    
+
     return newErrors;
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = validate();
-    
+
     if (Object.keys(newErrors).length === 0) {
       // Submit the form
       console.log('Form submitted:', formData);
@@ -453,14 +446,14 @@ const ExampleForm = () => {
         email: '',
         role: '',
         message: '',
-        agreeTerms: false
+        agreeTerms: false,
       });
       setErrors({});
     } else {
       setErrors(newErrors);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto">
       <FormGroup>
@@ -475,7 +468,7 @@ const ExampleForm = () => {
         />
         {errors.name && <FormError>{errors.name}</FormError>}
       </FormGroup>
-      
+
       <FormGroup>
         <FormLabel htmlFor="email">Email Address</FormLabel>
         <TextInput
@@ -489,7 +482,7 @@ const ExampleForm = () => {
         />
         {errors.email && <FormError>{errors.email}</FormError>}
       </FormGroup>
-      
+
       <FormGroup>
         <FormLabel htmlFor="role">Role</FormLabel>
         <Select
@@ -506,7 +499,7 @@ const ExampleForm = () => {
         </Select>
         {errors.role && <FormError>{errors.role}</FormError>}
       </FormGroup>
-      
+
       <FormGroup>
         <FormLabel htmlFor="message">Message (Optional)</FormLabel>
         <TextArea
@@ -517,7 +510,7 @@ const ExampleForm = () => {
           rows={4}
         />
       </FormGroup>
-      
+
       <FormGroup>
         <Checkbox
           id="agreeTerms"
@@ -529,7 +522,7 @@ const ExampleForm = () => {
         />
         {errors.agreeTerms && <FormError>{errors.agreeTerms}</FormError>}
       </FormGroup>
-      
+
       <Button type="submit">Submit Form</Button>
     </form>
   );

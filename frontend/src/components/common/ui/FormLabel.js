@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 /**
  * FormLabel component for consistent form labels
- * 
+ *
  * @param {Object} props - Component props
  * @param {string} props.htmlFor - ID of the form element this label is for
  * @param {React.ReactNode} props.children - Label content
@@ -11,16 +11,10 @@ import PropTypes from 'prop-types';
  * @param {string} props.className - Additional CSS classes
  * @returns {JSX.Element} - Rendered component
  */
-const FormLabel = ({
-  htmlFor,
-  children,
-  required = false,
-  className = '',
-  ...rest
-}) => {
+const FormLabel = ({ htmlFor, children, required = false, className = '', ...rest }) => {
   // Base classes for the form label
   const baseClasses = 'block mb-2 text-sm font-medium';
-  
+
   // Combine all classes
   const labelClasses = `${baseClasses} ${className}`;
 

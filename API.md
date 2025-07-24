@@ -33,6 +33,7 @@ GET /api/people
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -63,6 +64,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -104,6 +106,7 @@ GET /api/duties
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -148,11 +151,13 @@ Content-Type: application/json
 ```
 
 **Frequency Options:**
+
 - `"daily"` - Every day
 - `"weekly"` - Specific days of the week
 - `"custom"` - Custom scheduling
 
 **Days of Week (for weekly duties):**
+
 - `0` = Sunday
 - `1` = Monday
 - `2` = Tuesday
@@ -190,6 +195,7 @@ GET /api/assignments
 ```
 
 **Query Parameters:**
+
 - `start_date` - Filter assignments from this date (YYYY-MM-DD)
 - `end_date` - Filter assignments to this date (YYYY-MM-DD)
 - `person_id` - Filter by person ID
@@ -197,11 +203,13 @@ GET /api/assignments
 - `status` - Filter by status (`pending`, `completed`, `overdue`)
 
 **Example:**
+
 ```http
 GET /api/assignments?start_date=2024-01-15&end_date=2024-01-21&status=pending
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -283,6 +291,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -302,6 +311,7 @@ POST /api/admin/reset-assignments
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -318,6 +328,7 @@ POST /api/notifications/send-reminders
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -353,6 +364,7 @@ GET /api/admin/settings
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -396,13 +408,13 @@ Content-Type: application/json
 
 ### Common Error Codes
 
-| Code | Status | Description |
-|------|--------|-------------|
-| `VALIDATION_ERROR` | 400 | Invalid request data |
-| `NOT_FOUND` | 404 | Resource not found |
-| `DUPLICATE_ASSIGNMENT` | 409 | Assignment already exists for this date |
-| `DATABASE_ERROR` | 500 | Database operation failed |
-| `EMAIL_ERROR` | 500 | Email sending failed |
+| Code                   | Status | Description                             |
+| ---------------------- | ------ | --------------------------------------- |
+| `VALIDATION_ERROR`     | 400    | Invalid request data                    |
+| `NOT_FOUND`            | 404    | Resource not found                      |
+| `DUPLICATE_ASSIGNMENT` | 409    | Assignment already exists for this date |
+| `DATABASE_ERROR`       | 500    | Database operation failed               |
+| `EMAIL_ERROR`          | 500    | Email sending failed                    |
 
 ### Example Error Response
 
@@ -425,17 +437,20 @@ Currently, no rate limiting is implemented. In production, consider implementing
 ## Data Validation
 
 ### Person Validation
+
 - `name`: Required, 1-100 characters
 - `email`: Optional, valid email format
 - `phone`: Optional, any format
 
 ### Duty Validation
+
 - `name`: Required, 1-100 characters
 - `description`: Optional, up to 500 characters
 - `frequency`: Required, one of: `daily`, `weekly`, `custom`
 - `days_of_week`: Required for weekly duties, array of integers 0-6
 
 ### Assignment Validation
+
 - `duty_id`: Required, must exist in duties table
 - `person_id`: Required, must exist in people table
 - `assigned_date`: Required, valid date format (YYYY-MM-DD)
@@ -458,7 +473,7 @@ Planned webhook endpoints for external integrations:
 const API_BASE = 'http://localhost:5000/api';
 
 // Get all people
-const people = await fetch(`${API_BASE}/people`).then(r => r.json());
+const people = await fetch(`${API_BASE}/people`).then((r) => r.json());
 
 // Create assignment
 const assignment = await fetch(`${API_BASE}/assignments`, {
@@ -468,9 +483,9 @@ const assignment = await fetch(`${API_BASE}/assignments`, {
     duty_id: 1,
     person_id: 2,
     assigned_date: '2024-01-16',
-    due_date: '2024-01-16'
-  })
-}).then(r => r.json());
+    due_date: '2024-01-16',
+  }),
+}).then((r) => r.json());
 ```
 
 ### Python
@@ -485,7 +500,7 @@ response = requests.get(f'{API_BASE}/duties')
 duties = response.json()
 
 # Complete assignment
-response = requests.post(f'{API_BASE}/assignments/1/complete', 
+response = requests.post(f'{API_BASE}/assignments/1/complete',
   json={'notes': 'Task completed successfully'})
 result = response.json()
 ```
