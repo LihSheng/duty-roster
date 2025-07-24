@@ -37,7 +37,6 @@ module.exports = {
               fix: function (fixer) {
                 const sourceCode = context.getSourceCode();
                 const arrowToken = sourceCode.getTokenBefore(node.body);
-                const blockStart = sourceCode.getTokenAfter(arrowToken);
                 const blockEnd = sourceCode.getLastToken(node.body);
                 const returnToken = sourceCode.getFirstToken(returnStatement);
                 

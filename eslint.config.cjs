@@ -5,61 +5,14 @@ const reactHooksPlugin = require('eslint-plugin-react-hooks');
 const importPlugin = require('eslint-plugin-import');
 const jsxA11yPlugin = require('eslint-plugin-jsx-a11y');
 
+// Import custom rules
+const preferDirectReturn = require('./scripts/eslint-rules/prefer-direct-return');
+const consistentExports = require('./scripts/eslint-rules/consistent-exports');
+
 // Define custom rules
 const customRules = {
-  'prefer-direct-return': {
-    meta: {
-      type: 'suggestion',
-      docs: {
-        description: 'Enforce direct return syntax for simple components',
-        category: 'Stylistic Issues',
-        recommended: false,
-      },
-      fixable: 'code',
-      schema: [],
-    },
-    create: function (context) {
-      return {
-        ArrowFunctionExpression(node) {
-          // Only check arrow functions with block bodies
-          if (node.body.type !== 'BlockStatement') {
-            return;
-          }
-
-          const body = node.body.body;
-          
-          // Check if the function body consists of a single return statement
-          if (body.length === 1 && body[0].type === 'ReturnStatement') {
-            const returnStatement = body[0];
-            
-            // Check if the return statement has a JSX expression
-            if (returnStatement.argument && 
-                (returnStatement.argument.type === 'JSXElement' || 
-                 returnStatement.argument.type === 'JSXFragment')) {
-              
-              context.report({
-                node,
-                message: 'Use direct return syntax for simple components',
-                fix: function (fixer) {
-                  const sourceCode = context.getSourceCode();
-                  const arrowToken = sourceCode.getTokenBefore(node.body);
-                  const blockStart = sourceCode.getTokenAfter(arrowToken);
-                  const blockEnd = sourceCode.getLastToken(node.body);
-                  const returnToken = sourceCode.getFirstToken(returnStatement);
-                  
-                  // Replace "=> { return jsx; }" with "=> (jsx)"
-                  return [
-                    fixer.replaceTextRange([arrowToken.range[1], returnToken.range[1]], ' ('),
-                    fixer.replaceTextRange([returnStatement.argument.range[1], blockEnd.range[1]], ')')
-                  ];
-                }
-              });
-            }
-          }
-        }
-      };
-    }
-  }
+  'prefer-direct-return': preferDirectReturn,
+  'consistent-exports': consistentExports
 };
 
 module.exports = [
@@ -111,7 +64,12 @@ module.exports = [
       import: importPlugin,
       'jsx-a11y': jsxA11yPlugin,
       // Add custom rules
-      custom: { rules: { 'prefer-direct-return': customRules['prefer-direct-return'] } }
+      custom: { 
+        rules: { 
+          'prefer-direct-return': customRules['prefer-direct-return'],
+          'consistent-exports': customRules['consistent-exports']
+        } 
+      }
     },
     settings: {
       react: {
@@ -125,7 +83,7 @@ module.exports = [
     },
     rules: {
       // Essential rules
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      // 'no-console' rule removed to allow console logging
       'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       'no-duplicate-imports': 'error',
       'no-var': 'error',
@@ -138,6 +96,7 @@ module.exports = [
       ],
       // Custom rules
       'custom/prefer-direct-return': 'error', // Use direct return syntax for simple components
+      'custom/consistent-exports': 'error', // Enforce consistent export patterns
 
       // React specific rules
       'react/prop-types': 'error',
@@ -146,15 +105,37 @@ module.exports = [
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
-      // Import rules
+      // Import/Export rules
       'import/order': [
         'error',
         {
-          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+          groups: [
+            ['builtin', 'external'],
+            ['internal'],
+            ['parent', 'sibling', 'index', 'object', 'type']
+          ],
+          pathGroups: [
+            {
+              pattern: '*.{css,scss,less,png,jpg,svg}',
+              group: 'sibling',
+              position: 'after',
+            }
+          ],
           'newlines-between': 'always',
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
+      'import/no-cycle': 'error', // Prevent circular dependencies
+      'import/no-unresolved': 'error', // Ensure imports point to a file/module that can be resolved
+      'import/named': 'error', // Ensure named imports correspond to named exports
+      'import/default': 'error', // Ensure default import corresponds to a default export
+      'import/namespace': 'error', // Ensure imported namespaces contain the referenced properties
+      'import/no-duplicates': 'error', // Prevent importing the same module multiple times
+      'import/no-useless-path-segments': 'error', // Prevent unnecessary path segments in import statements
+      'import/exports-last': 'error', // Ensure all exports are at the end of the file
+      'import/first': 'error', // Ensure all imports are at the top of the file
+      'import/no-anonymous-default-export': 'error', // Prevent anonymous default exports
+      'import/no-mutable-exports': 'error', // Prevent exporting mutable variables
 
       // Accessibility rules
       'jsx-a11y/alt-text': 'error',

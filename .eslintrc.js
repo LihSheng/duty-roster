@@ -35,7 +35,7 @@ module.exports = {
   },
   rules: {
     // Essential rules
-    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    // 'no-console' rule removed to allow console logging
     'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     'no-duplicate-imports': 'error',
     'no-var': 'error',
