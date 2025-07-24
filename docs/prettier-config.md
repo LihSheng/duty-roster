@@ -29,8 +29,11 @@ In addition to Prettier's formatting, we enforce the following coding style rule
 1. **Arrow Functions**: Use arrow functions instead of function expressions
 2. **Function Parameters**: Always keep parentheses around arrow function parameters, even when there's only one
 3. **Return Statements**: Always leave one blank line before return statements
+4. **Direct Return Syntax**: Use direct return syntax (parentheses instead of curly braces and return keyword) for components or functions that only return JSX without additional logic
 
-Example:
+Examples:
+
+### Arrow Functions and Return Statements
 
 ```javascript
 // ✅ Good
@@ -53,6 +56,41 @@ function calculateTotal(items) {
   }, 0);
   return sum * 1.1;
 }
+```
+
+### Direct Return Syntax
+
+```javascript
+// ✅ Good - Direct return syntax for simple components
+const Button = ({ onClick, children }) => (
+  <button type="button" onClick={onClick} className="btn">
+    {children}
+  </button>
+);
+
+// ❌ Bad - Unnecessary block and return statement
+const Button = ({ onClick, children }) => {
+  return (
+    <button type="button" onClick={onClick} className="btn">
+      {children}
+    </button>
+  );
+};
+
+// ✅ Good - Block syntax when additional logic is needed
+const SubmitButton = ({ isSubmitting, onClick, children }) => {
+  const handleClick = (e) => {
+    if (!isSubmitting) {
+      onClick(e);
+    }
+  };
+
+  return (
+    <button type="submit" onClick={handleClick} disabled={isSubmitting}>
+      {isSubmitting ? 'Submitting...' : children}
+    </button>
+  );
+};
 ```
 
 ## Integration with ESLint

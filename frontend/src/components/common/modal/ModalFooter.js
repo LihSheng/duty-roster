@@ -9,16 +9,13 @@ import PropTypes from 'prop-types';
  * @param {string} props.className - Additional CSS classes
  * @returns {JSX.Element} - Rendered component
  */
-const ModalFooter = ({ children, className = '' }) => {
-
-  return (
-    <div
-      className={`px-6 py-4 border-t border-light-300 dark:border-dark-600 flex items-center justify-end space-x-2 ${className}`}
-    >
-      {children}
-    </div>
-  );
-};
+const ModalFooter = ({ children, className = '' }) => (
+  <div
+    className={`px-6 py-4 border-t border-light-300 dark:border-dark-600 flex items-center justify-end space-x-2 ${className}`}
+  >
+    {children}
+  </div>
+);
 
 ModalFooter.propTypes = {
   children: PropTypes.node.isRequired,

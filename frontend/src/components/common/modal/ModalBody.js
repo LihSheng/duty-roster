@@ -9,9 +9,7 @@ import PropTypes from 'prop-types';
  * @param {string} props.className - Additional CSS classes
  * @returns {JSX.Element} - Rendered component
  */
-const ModalBody = ({ children, className = '' }) => {
-  return <div className={`px-6 py-4 overflow-y-auto ${className}`}>{children}</div>;
-};
+const ModalBody = ({ children, className = '' }) => <div className={`px-6 py-4 overflow-y-auto ${className}`}>{children}</div>;
 
 ModalBody.propTypes = {
   children: PropTypes.node.isRequired,
