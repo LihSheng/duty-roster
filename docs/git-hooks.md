@@ -4,11 +4,10 @@ This project uses Git hooks to enforce code quality standards before commits are
 
 ## Pre-commit Hook
 
-The pre-commit hook runs automatically when you attempt to make a commit. It performs the following checks:
+The pre-commit hook runs automatically when you attempt to make a commit. It uses lint-staged to:
 
-1. **Lint-staged**: Checks and fixes formatting and linting issues in the staged files
-2. **ESLint**: Ensures there are no ESLint errors in the entire project
-3. **Prettier**: Verifies that all files follow the Prettier formatting rules
+1. Run ESLint on staged JavaScript/JSX files and fix issues when possible
+2. Run Prettier on all staged files to ensure consistent formatting
 
 If any of these checks fail, the commit will be blocked, and you'll need to fix the issues before you can commit your changes.
 
