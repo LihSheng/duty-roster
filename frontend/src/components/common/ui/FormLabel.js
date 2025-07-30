@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -49,4 +49,4 @@ FormLabel.propTypes = {
   className: PropTypes.string,
 };
 
-export default FormLabel;
+export default memo(FormLabel);

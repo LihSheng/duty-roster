@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -18,6 +18,13 @@ const ModalHeader = ({
 	className = '',
 	id,
 }) => {
+	// Memoized close handler
+	const handleClose = useCallback(() => {
+		if (onClose) {
+			onClose();
+		}
+	}, [onClose]);
+
 	return (
 		<div
 			className={`px-4 sm:px-6 py-3 sm:py-4 border-b border-light-300 dark:border-dark-600 flex items-center justify-between ${className}`}
@@ -31,7 +38,7 @@ const ModalHeader = ({
 			{showCloseButton && onClose && (
 				<button
 					type='button'
-					onClick={onClose}
+					onClick={handleClose}
 					className='text-light-500 hover:text-dark-900 dark:text-light-400 dark:hover:text-light-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-dark-800 rounded-full p-1 transition-colors duration-200 flex-shrink-0'
 					aria-label='Close modal'
 					data-testid='modal-close-button'
@@ -65,4 +72,4 @@ ModalHeader.propTypes = {
 	id: PropTypes.string,
 };
 
-export default ModalHeader;
+export default memo(ModalHeader);

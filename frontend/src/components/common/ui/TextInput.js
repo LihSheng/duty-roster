@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -90,4 +90,4 @@ TextInput.propTypes = {
   'aria-describedby': PropTypes.string,
 };
 
-export default TextInput;
+export default memo(TextInput);

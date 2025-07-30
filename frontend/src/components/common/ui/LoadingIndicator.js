@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -72,4 +72,4 @@ LoadingIndicator.propTypes = {
   'aria-label': PropTypes.string,
 };
 
-export default LoadingIndicator;
+export default memo(LoadingIndicator);

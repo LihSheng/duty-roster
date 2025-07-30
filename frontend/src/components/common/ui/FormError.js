@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -58,4 +58,4 @@ FormError.propTypes = {
   className: PropTypes.string,
 };
 
-export default FormError;
+export default memo(FormError);

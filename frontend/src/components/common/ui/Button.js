@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import LoadingIndicator from './LoadingIndicator';
 
@@ -58,15 +58,15 @@ const Button = ({
   // Loading indicator size based on button size
   const loaderSize = size === 'small' ? 'small' : size === 'large' ? 'medium' : 'small';
 
-  // Ensure onClick is a function
-  const handleClick = (e) => {
+  // Memoized click handler to prevent unnecessary re-renders
+  const handleClick = useCallback((e) => {
     if (onClick && typeof onClick === 'function') {
       onClick(e);
     }
-  };
+  }, [onClick]);
 
-  // Handle keyboard navigation
-  const handleKeyDown = (e) => {
+  // Memoized keyboard navigation handler
+  const handleKeyDown = useCallback((e) => {
     // Activate button on Enter or Space key
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -74,7 +74,7 @@ const Button = ({
         handleClick(e);
       }
     }
-  };
+  }, [handleClick, disabled, isLoading]);
 
   return (
     <button
@@ -115,4 +115,4 @@ Button.propTypes = {
   'aria-describedby': PropTypes.string,
 };
 
-export default Button;
+export default memo(Button);

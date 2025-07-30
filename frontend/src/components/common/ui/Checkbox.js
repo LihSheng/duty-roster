@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -65,8 +65,8 @@ const Checkbox = ({
   const errorId = error && typeof error === 'string' ? `${id}-error` : undefined;
   const combinedAriaDescribedBy = [ariaDescribedBy, errorId].filter(Boolean).join(' ') || undefined;
 
-  // Handle keyboard navigation
-  const handleKeyDown = (e) => {
+  // Memoized keyboard navigation handler
+  const handleKeyDown = useCallback((e) => {
     // Toggle checkbox on Space key
     if (e.key === ' ') {
       e.preventDefault();
@@ -77,7 +77,7 @@ const Checkbox = ({
         onChange(syntheticEvent);
       }
     }
-  };
+  }, [disabled, checked, name, onChange]);
 
   return (
     <div className={containerClasses}>
@@ -122,4 +122,4 @@ Checkbox.propTypes = {
   'aria-describedby': PropTypes.string,
 };
 
-export default Checkbox;
+export default memo(Checkbox);

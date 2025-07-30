@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 
@@ -92,13 +92,13 @@ const BaseModal = ({
     }
   }, [isOpen, onClose, closeOnEsc]);
 
-  // Handle click outside
-  const handleOverlayClick = (event) => {
+  // Memoized click outside handler
+  const handleOverlayClick = useCallback((event) => {
     // Make sure the click is on the overlay itself, not a child element
     if (closeOnOutsideClick && modalRef.current && !modalRef.current.contains(event.target) && event.target.classList.contains('modal-overlay')) {
       onClose();
     }
-  };
+  }, [closeOnOutsideClick, onClose]);
 
   // Size classes with responsive design
   const sizeClasses = {
@@ -147,4 +147,4 @@ BaseModal.propTypes = {
   'aria-describedby': PropTypes.string,
 };
 
-export default BaseModal;
+export default memo(BaseModal);

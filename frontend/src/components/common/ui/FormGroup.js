@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -42,4 +42,4 @@ FormGroup.propTypes = {
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };
 
-export default FormGroup;
+export default memo(FormGroup);

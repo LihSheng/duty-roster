@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -58,8 +58,8 @@ const Select = ({
   const errorId = error && typeof error === 'string' ? `${id}-error` : undefined;
   const combinedAriaDescribedBy = [ariaDescribedBy, errorId].filter(Boolean).join(' ') || undefined;
 
-  // Handle keyboard navigation
-  const handleKeyDown = (e) => {
+  // Memoized keyboard navigation handler
+  const handleKeyDown = useCallback((e) => {
     // Allow arrow keys, Enter, Escape, and Tab for navigation
     if (['ArrowUp', 'ArrowDown', 'Enter', 'Escape', 'Tab'].includes(e.key)) {
       // Let the browser handle these keys naturally
@@ -78,7 +78,7 @@ const Select = ({
         onChange(syntheticEvent);
       }
     }
-  };
+  }, [options, onChange, name]);
 
   return (
     <select
@@ -130,4 +130,4 @@ Select.propTypes = {
   'aria-describedby': PropTypes.string,
 };
 
-export default Select;
+export default memo(Select);

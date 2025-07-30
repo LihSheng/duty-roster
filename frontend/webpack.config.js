@@ -34,6 +34,8 @@ module.exports = (env, argv) => {
                   plugins: [
                     require('tailwindcss'),
                     require('autoprefixer'),
+                    // Add cssnano for production CSS optimization
+                    ...(isProduction ? [require('cssnano')({ preset: 'default' })] : []),
                   ],
                 },
               },

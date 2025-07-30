@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -25,4 +25,4 @@ ModalFooter.propTypes = {
   className: PropTypes.string,
 };
 
-export default ModalFooter;
+export default memo(ModalFooter);
