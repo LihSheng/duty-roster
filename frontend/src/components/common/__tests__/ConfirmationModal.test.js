@@ -97,4 +97,45 @@ describe('ConfirmationModal', () => {
     expect(screen.queryByText('Confirmation')).not.toBeInTheDocument();
     expect(screen.queryByText('Are you sure you want to proceed?')).not.toBeInTheDocument();
   });
+
+  test('uses BaseModal component', () => {
+    render(<ConfirmationModal {...defaultProps} />);
+    
+    // Verify that the modal container is present (from BaseModal)
+    expect(screen.getByTestId('modal-container')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-overlay')).toBeInTheDocument();
+  });
+
+  test('supports different modal sizes', () => {
+    render(<ConfirmationModal {...defaultProps} size="large" />);
+    
+    const modalContainer = screen.getByTestId('modal-container');
+    expect(modalContainer).toHaveClass('max-w-2xl');
+  });
+
+  test('uses Button components for actions', () => {
+    render(<ConfirmationModal {...defaultProps} />);
+    
+    const confirmButton = screen.getByText('Confirm');
+    const cancelButton = screen.getByText('Cancel');
+    
+    // Verify buttons have the expected classes from Button component
+    expect(confirmButton).toHaveClass('bg-primary-600');
+    expect(cancelButton).toHaveClass('bg-light-200');
+  });
+
+  test('maintains all existing functionality after refactoring', () => {
+    render(<ConfirmationModal {...defaultProps} />);
+    
+    // Test all the core functionality still works
+    expect(screen.getByText('Confirmation')).toBeInTheDocument();
+    expect(screen.getByText('Are you sure you want to proceed?')).toBeInTheDocument();
+    
+    // Test button clicks
+    fireEvent.click(screen.getByText('Confirm'));
+    expect(mockOnConfirm).toHaveBeenCalledTimes(1);
+    
+    fireEvent.click(screen.getByText('Cancel'));
+    expect(mockOnCancel).toHaveBeenCalledTimes(1);
+  });
 });
