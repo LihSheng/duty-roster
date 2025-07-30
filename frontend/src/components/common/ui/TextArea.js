@@ -28,27 +28,38 @@ const TextArea = ({
   error = false,
   rows = 3,
   className = '',
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
   ...rest
 }) => {
-  // Base classes for the textarea
-  const baseClasses = 'block w-full px-3 py-2 rounded-md transition-colors focus:outline-none focus:ring-2';
+  // Base classes for the textarea with responsive design
+  const baseClasses = 'block w-full px-3 py-2 text-sm sm:text-base rounded-md border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 resize-y min-h-[2.5rem]';
   
-  // Error state classes
+  // Error state classes with better contrast
   const errorClasses = error
-    ? 'border-danger-600 focus:border-danger-600 focus:ring-danger-500'
-    : 'border-light-300 focus:border-primary-500 focus:ring-primary-500 dark:border-dark-600';
+    ? 'border-danger-600 focus:border-danger-600 focus:ring-danger-500 bg-danger-50 dark:bg-danger-900/20'
+    : 'border-light-300 focus:border-primary-500 focus:ring-primary-500 dark:border-dark-600 hover:border-light-400 dark:hover:border-dark-500';
   
   // Disabled state classes
-  const disabledClasses = disabled ? 'bg-light-100 cursor-not-allowed dark:bg-dark-700' : 'bg-white dark:bg-dark-800';
+  const disabledClasses = disabled 
+    ? 'bg-light-100 cursor-not-allowed opacity-60 dark:bg-dark-700 resize-none' 
+    : 'bg-white dark:bg-dark-800';
+  
+  // Text color classes
+  const textClasses = 'text-dark-900 dark:text-light-100 placeholder-light-500 dark:placeholder-dark-400';
   
   // Combine all classes
-  const textareaClasses = `${baseClasses} ${errorClasses} ${disabledClasses} ${className}`;
+  const textareaClasses = `${baseClasses} ${errorClasses} ${disabledClasses} ${textClasses} ${className}`;
+
+  // Generate aria-describedby for error state
+  const errorId = error && typeof error === 'string' ? `${id}-error` : undefined;
+  const combinedAriaDescribedBy = [ariaDescribedBy, errorId].filter(Boolean).join(' ') || undefined;
 
   return (
     <textarea
       id={id}
       name={name}
-      value={value}
+      value={value || ''}
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
@@ -56,6 +67,9 @@ const TextArea = ({
       rows={rows}
       className={textareaClasses}
       aria-invalid={!!error}
+      aria-label={ariaLabel}
+      aria-describedby={combinedAriaDescribedBy}
+      aria-required={required}
       {...rest}
     />
   );
@@ -72,6 +86,8 @@ TextArea.propTypes = {
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   rows: PropTypes.number,
   className: PropTypes.string,
+  'aria-label': PropTypes.string,
+  'aria-describedby': PropTypes.string,
 };
 
 export default TextArea;

@@ -18,16 +18,26 @@ const FormLabel = ({
   className = '',
   ...rest
 }) => {
-  // Base classes for the form label
-  const baseClasses = 'block mb-2 text-sm font-medium';
+  // Base classes for the form label with responsive design
+  const baseClasses = 'block mb-1 sm:mb-2 text-sm sm:text-base font-medium text-dark-900 dark:text-light-100';
   
   // Combine all classes
   const labelClasses = `${baseClasses} ${className}`;
 
   return (
     <label htmlFor={htmlFor} className={labelClasses} {...rest}>
-      {children}
-      {required && <span className="ml-1 text-danger-600">*</span>}
+      <span className="flex items-center gap-1">
+        {children}
+        {required && (
+          <span 
+            className="text-danger-600 dark:text-danger-400 text-base" 
+            aria-label="required"
+            title="This field is required"
+          >
+            *
+          </span>
+        )}
+      </span>
     </label>
   );
 };

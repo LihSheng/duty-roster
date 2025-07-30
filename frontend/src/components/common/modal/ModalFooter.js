@@ -14,7 +14,7 @@ const ModalFooter = ({
   className = '',
 }) => {
   return (
-    <div className={`px-6 py-4 border-t border-light-300 dark:border-dark-600 flex items-center justify-end space-x-2 ${className}`}>
+    <div className={`px-4 sm:px-6 py-3 sm:py-4 border-t border-light-300 dark:border-dark-600 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 ${className}`}>
       {children}
     </div>
   );

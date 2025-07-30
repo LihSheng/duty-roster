@@ -25,26 +25,71 @@ const BaseModal = ({
   closeOnOutsideClick = true,
   className = '',
   overlayClassName = '',
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
 }) => {
   const modalRef = useRef(null);
+  const previousActiveElement = useRef(null);
 
-  // Handle escape key press
+  // Handle focus management and escape key press
   useEffect(() => {
-    const handleEscKey = (event) => {
-      if (closeOnEsc && event.key === 'Escape') {
-        onClose();
-      }
-    };
-
     if (isOpen) {
-      document.addEventListener('keydown', handleEscKey);
-      document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
-    }
+      // Store the previously focused element
+      previousActiveElement.current = document.activeElement;
+      
+      // Prevent scrolling when modal is open
+      document.body.style.overflow = 'hidden';
+      
+      // Focus the modal container after a brief delay to ensure it's rendered
+      setTimeout(() => {
+        if (modalRef.current) {
+          modalRef.current.focus();
+        }
+      }, 100);
 
-    return () => {
-      document.removeEventListener('keydown', handleEscKey);
-      document.body.style.overflow = ''; // Restore scrolling when modal is closed
-    };
+      const handleEscKey = (event) => {
+        if (closeOnEsc && event.key === 'Escape') {
+          onClose();
+        }
+      };
+
+      // Trap focus within the modal
+      const handleTabKey = (event) => {
+        if (event.key === 'Tab' && modalRef.current) {
+          const focusableElements = modalRef.current.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          );
+          const firstElement = focusableElements[0];
+          const lastElement = focusableElements[focusableElements.length - 1];
+
+          if (event.shiftKey) {
+            if (document.activeElement === firstElement) {
+              event.preventDefault();
+              lastElement?.focus();
+            }
+          } else {
+            if (document.activeElement === lastElement) {
+              event.preventDefault();
+              firstElement?.focus();
+            }
+          }
+        }
+      };
+
+      document.addEventListener('keydown', handleEscKey);
+      document.addEventListener('keydown', handleTabKey);
+
+      return () => {
+        document.removeEventListener('keydown', handleEscKey);
+        document.removeEventListener('keydown', handleTabKey);
+        document.body.style.overflow = '';
+        
+        // Restore focus to the previously focused element
+        if (previousActiveElement.current) {
+          previousActiveElement.current.focus();
+        }
+      };
+    }
   }, [isOpen, onClose, closeOnEsc]);
 
   // Handle click outside
@@ -55,11 +100,11 @@ const BaseModal = ({
     }
   };
 
-  // Size classes
+  // Size classes with responsive design
   const sizeClasses = {
-    small: 'max-w-md',
-    medium: 'max-w-lg',
-    large: 'max-w-2xl',
+    small: 'max-w-sm sm:max-w-md',
+    medium: 'max-w-md sm:max-w-lg',
+    large: 'max-w-lg sm:max-w-2xl lg:max-w-4xl',
   };
 
   // Don't render anything if the modal is not open
@@ -68,7 +113,7 @@ const BaseModal = ({
   // Create a portal to render the modal at the end of the document body
   return createPortal(
     <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 transition-opacity modal-overlay ${overlayClassName}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black bg-opacity-50 transition-opacity modal-overlay ${overlayClassName}`}
       onClick={handleOverlayClick}
       aria-modal="true"
       role="dialog"
@@ -76,8 +121,11 @@ const BaseModal = ({
     >
       <div 
         ref={modalRef}
-        className={`bg-white dark:bg-dark-800 rounded-lg shadow-xl w-full ${sizeClasses[size]} transform transition-all ${className}`}
+        className={`bg-white dark:bg-dark-800 rounded-lg shadow-xl w-full ${sizeClasses[size]} transform transition-all max-h-[90vh] overflow-y-auto ${className}`}
         data-testid="modal-container"
+        tabIndex={-1}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
       >
         {children}
       </div>
@@ -95,6 +143,8 @@ BaseModal.propTypes = {
   closeOnOutsideClick: PropTypes.bool,
   className: PropTypes.string,
   overlayClassName: PropTypes.string,
+  'aria-labelledby': PropTypes.string,
+  'aria-describedby': PropTypes.string,
 };
 
 export default BaseModal;

@@ -12,9 +12,13 @@ import PropTypes from 'prop-types';
 const ModalBody = ({
   children,
   className = '',
+  id,
 }) => {
   return (
-    <div className={`px-6 py-4 overflow-y-auto ${className}`}>
+    <div 
+      id={id}
+      className={`px-4 sm:px-6 py-4 sm:py-6 overflow-y-auto text-sm sm:text-base text-dark-700 dark:text-light-200 ${className}`}
+    >
       {children}
     </div>
   );
@@ -23,6 +27,7 @@ const ModalBody = ({
 ModalBody.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
+  id: PropTypes.string,
 };
 
 export default ModalBody;
