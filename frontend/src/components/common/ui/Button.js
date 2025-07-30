@@ -41,7 +41,7 @@ const Button = ({
     primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 active:bg-primary-800',
     secondary: 'bg-light-200 text-dark-800 hover:bg-light-300 focus:ring-light-400 active:bg-light-400 dark:bg-dark-600 dark:text-light-100 dark:hover:bg-dark-700 dark:focus:ring-dark-500 dark:active:bg-dark-800',
     danger: 'bg-danger-600 text-white hover:bg-danger-700 focus:ring-danger-500 active:bg-danger-800',
-    success: 'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500 active:bg-secondary-800',
+    success: 'bg-success-600 text-white hover:bg-success-700 focus:ring-success-500 active:bg-success-800',
   };
 
   // Base classes that apply to all buttons with enhanced accessibility
